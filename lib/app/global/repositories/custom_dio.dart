@@ -1,3 +1,4 @@
+import 'package:challenge_bt_app/app/global/consts/api_consts.dart';
 import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -5,8 +6,6 @@ import 'package:get/get.dart';
 class GlobalDio {
   final dio = Dio();
   final localDb = Get.find<LocalDatabase>();
-
-  final baseUrl = "https://jsonplaceholder.typicode.com";
 
   GlobalDio() {
     configDio();
@@ -22,13 +21,12 @@ class GlobalDio {
   }
 
   void configAuthHeader() async {
-    String token = "";
+    String token = await localDb.getItem(accessToken);
+    String refresh = await localDb.getItem(refreshToken);
 
-    if (await localDb.getItem("token") != null) {
-      token = await localDb.getItem("token");
+    if (token != null) dio.options.headers = {'authorization': token};
 
-      dio.options.headers = {'authentication': 'Bearer $token'};
-    }
+    if (refresh != null) dio.options.headers = {refreshTokenHeader: refresh};
   }
 }
 
