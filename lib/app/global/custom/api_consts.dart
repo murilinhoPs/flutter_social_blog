@@ -1,7 +1,9 @@
-const String accessToken = 'accessToken';
+const String ACCESSTOKEN = 'accessToken';
 
-const String refreshToken = 'refreshToken';
+const String REFRESHTOKEN = 'refreshToken';
 
-const String refreshTokenHeader = 'x-refresh-token';
+const String USERID = 'id';
 
-const String baseUrl = "https://services-ps-ts.herokuapp.com";
+const String REFRESHTOKENHEADER = 'X-Refresh-Token';
+
+const String BASEURL = "https://services-ps-ts.herokuapp.com";

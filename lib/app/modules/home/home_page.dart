@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Text(
-          'Home page do: ' + Get.parameters["id"],
+          'Home page do: ',
         ),
       ),
     );

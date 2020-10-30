@@ -24,7 +24,7 @@ class AppRoutes {
       transition: pageTransition,
     ),
     GetPage(
-      name: '/home/:id',
+      name: '/home',
       page: () => HomePage(),
       transition: pageTransition,
     )

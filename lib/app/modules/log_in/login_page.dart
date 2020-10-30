@@ -1,6 +1,8 @@
 import 'package:challenge_bt_app/app/global/controllers/auth_ctrl.dart';
+import 'package:challenge_bt_app/app/global/custom/api_consts.dart';
 import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
 import 'package:challenge_bt_app/app/global/custom_dio/custom_dio.dart';
+import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
 import 'package:challenge_bt_app/app/global/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -31,8 +33,11 @@ class LoginPage extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.lightOrange),
                 ),
-                onPressed: () => Get.find<GlobalDio>().dio.get('/users/1') //Get.toNamed('/signup'),
-                ),
+                onPressed: () async {
+                  int id = await Get.find<LocalDatabase>().getItem(USERID);
+
+                  Get.find<GlobalDio>().dio.get('/users/$id'); //Get.toNamed('/signup'),
+                }),
             SizedBox(
               height: 40,
               child: ElevatedButton(
@@ -45,12 +50,8 @@ class LoginPage extends StatelessWidget {
                   'Entrar',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                onPressed: () async {
-                  final loginInfo = await Get.find<AuthController>()
-                      .login({"email": "murilinhorps@gmail.com", "password": "murilo123456"});
-
-                  Get.toNamed('/home/${loginInfo.username}');
-                },
+                onPressed: () => Get.find<AuthController>()
+                    .login({"email": "user2@gmail.com", "password": "senhauser2"}),
               ),
             ),
           ],
@@ -70,7 +71,7 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
+                    padding: EdgeInsets.only(top: 40, bottom: 20),
                     child: Text(
                       'Entrar no app',
                       style: TextStyle(

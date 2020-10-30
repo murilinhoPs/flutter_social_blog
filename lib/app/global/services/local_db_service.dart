@@ -22,4 +22,10 @@ class LocalDatabase {
 
     await prefs.setInt(keyName, keyValue);
   }
+
+  Future<bool> deleteItem(String keyName) async {
+    prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove(keyName);
+  }
 }

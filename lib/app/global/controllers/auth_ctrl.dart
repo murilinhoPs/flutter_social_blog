@@ -1,5 +1,4 @@
 import 'package:challenge_bt_app/app/global/custom/api_consts.dart';
-import 'package:challenge_bt_app/app/global/custom_dio/auth_interceptors.dart';
 import 'package:challenge_bt_app/app/global/custom_dio/custom_dio.dart';
 import 'package:challenge_bt_app/app/global/models/login_response_model.dart';
 import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
@@ -13,29 +12,65 @@ class AuthController {
 
   AuthController() {
     _httpService = Dio();
-    _httpService.options.baseUrl = baseUrl;
+    _httpService.options.baseUrl = BASEURL;
     _httpService.interceptors.add(CustomInterceptors());
   }
 
-  String token = '';
-  String refresh = '';
+  String token;
+  String refresh;
 
-  Future<LoginResponseModel> login(Map<String, dynamic> loginData) async {
-    token = await localDb.getItem(accessToken);
-    refresh = await localDb.getItem(refreshToken);
+  Future login(Map<String, dynamic> loginData) async {
+    // await localDb.deleteItem(REFRESHTOKEN);
+
+    refresh = await localDb.getItem(REFRESHTOKEN);
 
     try {
       var response = await _httpService.post('/auth/login', data: loginData);
 
-      LoginResponseModel loginResponse = LoginResponseModel.fromJson(response.data);
+      if (response.statusCode == 200) {
+        LoginResponseModel loginResponse = LoginResponseModel.fromJson(response.data);
 
-      localDb.setItemString(accessToken, loginResponse.accessToken);
-      localDb.setItemString(refreshToken, loginResponse.refreshToken);
+        localDb.setItemString(ACCESSTOKEN, loginResponse.accessToken);
+        if (refresh == null) localDb.setItemString(REFRESHTOKEN, loginResponse.refreshToken);
+        localDb.setItemInt(USERID, loginResponse.userId);
 
-      print(loginResponse.username);
+        token = await localDb.getItem(ACCESSTOKEN);
+        refresh = await localDb.getItem(REFRESHTOKEN);
 
-      return loginResponse;
-    } catch (e) {
+        print(loginResponse.username);
+
+        Get.toNamed('/home');
+
+        return loginResponse;
+      }
+    } on DioError catch (e) {
+      print(e);
+    }
+  }
+
+  Future generateToken(Map<String, dynamic> loginData) async {
+    refresh = await localDb.getItem(REFRESHTOKEN);
+
+    try {
+      var response = await _httpService.post('/auth/login', data: loginData);
+
+      if (response.statusCode == 200) {
+        LoginResponseModel loginResponse = LoginResponseModel.fromJson(response.data);
+
+        localDb.setItemString(ACCESSTOKEN, loginResponse.accessToken);
+        if (refresh == null) localDb.setItemString(REFRESHTOKEN, loginResponse.refreshToken);
+        localDb.setItemInt(USERID, loginResponse.userId);
+
+        token = await localDb.getItem(ACCESSTOKEN);
+        refresh = await localDb.getItem(REFRESHTOKEN);
+
+        print(loginResponse.username);
+
+        Get.toNamed('/home');
+
+        return loginResponse;
+      }
+    } on DioError catch (e) {
       print(e);
     }
   }

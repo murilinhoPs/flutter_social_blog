@@ -1,3 +1,4 @@
+import 'package:challenge_bt_app/app/global/controllers/http_service_state_ctrl.dart';
 import 'package:challenge_bt_app/app/global/custom/api_consts.dart';
 import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
 import 'package:dio/dio.dart';
@@ -6,17 +7,18 @@ import 'package:get/get.dart';
 import 'auth_interceptors.dart';
 
 class GlobalDio {
-  final dio = Dio();
+  Dio dio;
 
   GlobalDio() {
     configDio();
   }
 
-  void configDio() async {
-    dio.options.baseUrl = baseUrl;
+  void configDio() {
+    dio = Dio();
+    dio.options.baseUrl = BASEURL;
 
-    dio.options.connectTimeout = 10000; //5s
-    dio.options.receiveTimeout = 10000;
+    // dio.options.connectTimeout = 10000; //5s
+    // dio.options.receiveTimeout = 10000;
 
     configAuthHeader();
 
@@ -25,12 +27,12 @@ class GlobalDio {
   }
 
   void configAuthHeader() async {
-    String token = await Get.find<LocalDatabase>().getItem(accessToken);
-    String refresh = await Get.find<LocalDatabase>().getItem(refreshToken);
+    String token = await Get.find<LocalDatabase>().getItem(ACCESSTOKEN);
+    String refresh = await Get.find<LocalDatabase>().getItem(REFRESHTOKEN);
 
     if (token != null) dio.options.headers = {'authorization': token};
 
-    if (refresh != null) dio.options.headers = {refreshTokenHeader: refresh};
+    if (refresh != null) dio.options.headers = {REFRESHTOKENHEADER: refresh};
   }
 }
 
@@ -44,12 +46,19 @@ class CustomInterceptors implements InterceptorsWrapper {
 
   @override
   Future onResponse(Response response) async {
-    print("Response: ${response.statusCode} -> Path: ${response}");
+    print("Response: ${response.statusCode} -> Path: ${response.data}");
+
+    return response;
   }
 
   @override
   Future onError(DioError err) async {
-    print("Error: ${err.response.statusCode} ->  Data: ${err.response.data}->Path: ${err.message}");
+    print(
+        "Error: ${err.response.statusCode} ->  Data: ${err.response.data["message"]} ->Path: ${err.message}");
+
+    if (err.response.statusCode >= 400)
+      Get.find<HttpServiceController>().showWarning(errorMessage: err.response.data["message"]);
+
     return err;
   }
 }

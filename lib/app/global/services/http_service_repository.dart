@@ -45,7 +45,9 @@ class HttpService implements IHttpServices {
         },
       );
 
-      return response.data;
+      if (response.statusCode != 404) return response.data;
+
+      _httpController.changeState(FetchState.errorLoading);
     } catch (err) {
       _httpController.changeState(FetchState.errorLoading);
 
