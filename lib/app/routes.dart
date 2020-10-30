@@ -20,11 +20,11 @@ class AppRoutes {
     ),
     GetPage(
       name: '/signup',
-      page: () => SignUpPage(),
+      page: () => SignupPage(),
       transition: pageTransition,
     ),
     GetPage(
-      name: '/home',
+      name: '/home/:id',
       page: () => HomePage(),
       transition: pageTransition,
     )

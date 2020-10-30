@@ -1,10 +1,12 @@
 import 'package:challenge_bt_app/app/global/controllers/http_service_state_ctrl.dart';
 import 'package:challenge_bt_app/app/global/interfaces/http_service_interface.dart';
+import 'package:challenge_bt_app/app/global/custom_dio/custom_dio.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 
 class HttpService implements IHttpServices {
   final _httpController = Get.find<HttpServiceController>();
+  final _globalDio = Get.find<GlobalDio>();
 
   @override
   void addToken(String token) {}
@@ -14,7 +16,7 @@ class HttpService implements IHttpServices {
     _httpController.changeState(FetchState.isLoading);
 
     try {
-      var response = await Get.find<Dio>().get(urlPath).timeout(
+      var response = await _globalDio.dio.get(urlPath).timeout(
         Duration(seconds: 30),
         onTimeout: () {
           _httpController.changeState(FetchState.errorLoading);
@@ -22,13 +24,7 @@ class HttpService implements IHttpServices {
         },
       );
 
-      if (response.statusCode == 200)
-        return response.data;
-      else {
-        _httpController.changeState(FetchState.errorLoading);
-
-        throw "Returned error code from api: ${response.statusCode}";
-      }
+      return response.data;
     } catch (err) {
       _httpController.changeState(FetchState.errorLoading);
 
@@ -37,8 +33,23 @@ class HttpService implements IHttpServices {
   }
 
   @override
-  Future post(String urlPath, bodyData, Options options) {
-    // TODO: implement post
-    throw UnimplementedError();
+  Future post(String urlPath, Map<String, dynamic> bodyData, {Options options}) async {
+    _httpController.changeState(FetchState.isLoading);
+
+    try {
+      var response = await _globalDio.dio.post(urlPath, data: bodyData).timeout(
+        Duration(seconds: 30),
+        onTimeout: () {
+          _httpController.changeState(FetchState.errorLoading);
+          return;
+        },
+      );
+
+      return response.data;
+    } catch (err) {
+      _httpController.changeState(FetchState.errorLoading);
+
+      throw "There's something wrong with connection: " + err.toString();
+    }
   }
 }

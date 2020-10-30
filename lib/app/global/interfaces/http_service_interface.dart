@@ -5,5 +5,5 @@ abstract class IHttpServices {
 
   Future get(String urlPath);
 
-  Future post(String urlPath, dynamic bodyData, Options options);
+  Future post(String urlPath, Map<String, dynamic> bodyData, {Options options});
 }

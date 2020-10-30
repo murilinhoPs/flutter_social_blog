@@ -16,7 +16,7 @@ class HttpServiceController extends GetxController {
     GetPlatform.isAndroid
         ? Get.snackbar(
             'Erro',
-            'Houve um erro ao carregar, tente novamente',
+            'Houve um erro na requisição, tente novamente',
             duration: Duration(seconds: 5),
             snackPosition: SnackPosition.BOTTOM,
             backgroundGradient: null,
@@ -29,7 +29,7 @@ class HttpServiceController extends GetxController {
           )
         : Get.snackbar(
             'Erro',
-            'Houve um erro ao carregar, tente novamente',
+            'Houve um erro na requisição, tente novamente',
             duration: Duration(seconds: 5),
             snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.white.withOpacity(0.7),

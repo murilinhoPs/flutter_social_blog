@@ -1,11 +1,12 @@
-import 'package:challenge_bt_app/app/global/consts/api_consts.dart';
+import 'package:challenge_bt_app/app/global/custom/api_consts.dart';
 import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 
+import 'auth_interceptors.dart';
+
 class GlobalDio {
   final dio = Dio();
-  final localDb = Get.find<LocalDatabase>();
 
   GlobalDio() {
     configDio();
@@ -17,12 +18,15 @@ class GlobalDio {
     dio.options.connectTimeout = 10000; //5s
     dio.options.receiveTimeout = 10000;
 
+    configAuthHeader();
+
+    dio.interceptors.add(AuthInterceptors());
     dio.interceptors.add(CustomInterceptors());
   }
 
   void configAuthHeader() async {
-    String token = await localDb.getItem(accessToken);
-    String refresh = await localDb.getItem(refreshToken);
+    String token = await Get.find<LocalDatabase>().getItem(accessToken);
+    String refresh = await Get.find<LocalDatabase>().getItem(refreshToken);
 
     if (token != null) dio.options.headers = {'authorization': token};
 
@@ -40,12 +44,12 @@ class CustomInterceptors implements InterceptorsWrapper {
 
   @override
   Future onResponse(Response response) async {
-    print("Response: ${response.statusCode} -> Path: ${response.data}");
+    print("Response: ${response.statusCode} -> Path: ${response}");
   }
 
   @override
   Future onError(DioError err) async {
-    print("Error: ${err.response.statusCode} -> Path: ${err.message}");
+    print("Error: ${err.response.statusCode} ->  Data: ${err.response.data}->Path: ${err.message}");
     return err;
   }
 }
