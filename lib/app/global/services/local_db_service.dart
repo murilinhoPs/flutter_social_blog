@@ -26,6 +26,6 @@ class LocalDatabase {
   Future<bool> deleteItem(String keyName) async {
     prefs = await SharedPreferences.getInstance();
 
-    await prefs.remove(keyName);
+    return await prefs.remove(keyName);
   }
 }

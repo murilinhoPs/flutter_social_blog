@@ -25,7 +25,7 @@ class HttpServiceRepository implements IHttpServices {
       );
 
       return response.data;
-    } catch (err) {
+    } on DioError catch (err) {
       _httpController.changeState(FetchState.errorLoading);
 
       throw "There's something wrong with connection: " + err.toString();
@@ -46,7 +46,7 @@ class HttpServiceRepository implements IHttpServices {
       );
 
       return response.data;
-    } catch (err) {
+    } on DioError catch (err) {
       _httpController.changeState(FetchState.errorLoading);
 
       throw "There's something wrong with connection: " + err.toString();

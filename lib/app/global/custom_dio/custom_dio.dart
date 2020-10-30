@@ -54,7 +54,7 @@ class CustomInterceptors implements InterceptorsWrapper {
   @override
   Future onError(DioError err) async {
     print(
-        "Error: ${err.response.statusCode} ->  Data: ${err.response.data["message"]} ->Path: ${err.message}");
+        "Error: ${err.response.statusCode} ->  Data: ${err.response.data["message"]} -> Path: ${err.request.path}");
 
     if (err.response.statusCode >= 400)
       Get.find<HttpServiceController>().showWarning(errorMessage: err.response.data["message"]);

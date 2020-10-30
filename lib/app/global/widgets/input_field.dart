@@ -5,10 +5,20 @@ import 'package:get/get.dart';
 class InputField extends StatelessWidget {
   final String labelText;
   final bool obscureTxt;
+  final bool hasError;
+  final Function clearError;
+  final Function(String) submit;
   final Function(String) onChanged;
   final String Function() setErrorTxt;
 
-  InputField({this.labelText, this.obscureTxt, this.onChanged, this.setErrorTxt});
+  InputField(
+      {this.labelText,
+      this.obscureTxt,
+      this.onChanged,
+      this.setErrorTxt,
+      this.hasError,
+      this.clearError,
+      this.submit});
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +38,12 @@ class InputField extends StatelessWidget {
             color: AppColors.lighterBackground,
           ),
         ),
-        errorText: setErrorTxt == null ? null : setErrorTxt(),
+        errorText: !hasError ? null : setErrorTxt(),
       ),
       onChanged: onChanged,
       obscureText: obscureTxt,
+      onTap: clearError,
+      onSubmitted: submit,
     );
   }
 }

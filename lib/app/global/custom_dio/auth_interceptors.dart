@@ -1,4 +1,3 @@
-import 'package:challenge_bt_app/app/global/controllers/auth_ctrl.dart';
 import 'package:challenge_bt_app/app/global/custom/api_consts.dart';
 import 'package:challenge_bt_app/app/global/custom_dio/custom_dio.dart';
 import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
@@ -22,10 +21,7 @@ class AuthInterceptors implements InterceptorsWrapper {
 
       print(token);
 
-      Map<String, dynamic> customHeaders = {
-        'Authorization': token + '12',
-        REFRESHTOKENHEADER: refresh
-      };
+      Map<String, dynamic> customHeaders = {'Authorization': token, REFRESHTOKENHEADER: refresh};
 
       options.headers.addAll(customHeaders);
 
@@ -35,6 +31,7 @@ class AuthInterceptors implements InterceptorsWrapper {
     }
 
     print("Request: ${options.method} -> Path: ${options.path}");
+
     return options;
   }
 
@@ -44,52 +41,31 @@ class AuthInterceptors implements InterceptorsWrapper {
 
     if (response.data['refreshAccess']) {
       final globalDio = Get.find<GlobalDio>();
+      final localDb = Get.find<LocalDatabase>();
+
       RequestOptions options = response.request;
 
       globalDio.dio.lock();
       globalDio.dio.interceptors.responseLock.lock();
       globalDio.dio.interceptors.errorLock.lock();
 
-      options.headers['Authorization'] = response.data['accessToken'];
+      localDb.setItemString(ACCESSTOKEN, response.data['accessToken']);
+
+      options.headers['Authorization'] = await localDb.getItem(ACCESSTOKEN);
+
+      globalDio.dio.unlock();
+      globalDio.dio.interceptors.responseLock.unlock();
+      globalDio.dio.interceptors.errorLock.unlock();
+
+      return globalDio.dio.request(options.path, options: options);
     }
   }
 
   @override
   Future onError(DioError err) async {
-    print('''Error: ${err.response.statusCode} ->  
-    Data: ${err.response.data}-> 
+    print('''Error: ${err.response.statusCode} ->
+    Data: ${err.response.data}->
     Path: ${err.message}''');
-
-    print(token);
-
-    if (err.response.statusCode == 401 || err.response.statusCode == 403) {
-      final globalDio = Get.find<GlobalDio>();
-
-      final authCtrl = Get.find<AuthController>();
-      RequestOptions options = err.response.request;
-
-      // if (authCtrl.token != options.headers["Authorization"]) {
-      //   options.headers["Authorization"] = authCtrl.token;
-
-      //   return globalDio.dio.request(options.path, options: options);
-      // }
-
-      globalDio.dio.lock();
-      globalDio.dio.interceptors.responseLock.lock();
-      globalDio.dio.interceptors.errorLock.lock();
-
-      print('Error new token: ${err.response}');
-
-      // return globalDio.dio.unlock();
-      // globalDio.dio.interceptors.responseLock.unlock();
-      // globalDio.dio.interceptors.errorLock.unlock();
-
-      print('''Error: ${err.response.statusCode} ->  
-    Data: ${err.response.data}-> 
-    Path: ${err.message}''');
-
-      return err;
-    }
 
     return err;
   }

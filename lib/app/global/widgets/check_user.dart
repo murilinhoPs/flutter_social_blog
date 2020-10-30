@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CheckUser extends StatelessWidget {
-  final _checkUserController = Get.put(CheckUserController());
+  final checkUserController = Get.put(CheckUserController());
 
   @override
   Widget build(BuildContext context) {
