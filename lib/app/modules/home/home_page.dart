@@ -12,8 +12,10 @@ class HomePage extends StatelessWidget {
         leading: CircleAvatar(
           child: Container(
             child: Obx(
-              () => Image.network(
-                _homeController.userImage.value,
+              () => Image(
+                image: NetworkImage(
+                  _homeController.userImage.value,
+                ),
               ),
             ),
           ),

@@ -39,7 +39,7 @@ class AuthInterceptors implements InterceptorsWrapper {
   Future onResponse(Response response) async {
     print("Response: ${response.statusCode} -> Path: ${response.data}");
 
-    if (response.data['refreshAccess']) {
+    if (response.data['refreshAccess'] != null) {
       final globalDio = Get.find<GlobalDio>();
       final localDb = Get.find<LocalDatabase>();
 

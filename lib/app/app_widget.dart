@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'global/repositories/user_repository.dart';
+import 'modules/home/controllers/response_home_ctrl.dart';
+import 'modules/log_in/controllers/loading_controller.dart';
 
 class AppWidget extends StatelessWidget {
   final localDb = Get.put(LocalDatabase()); //Get.lazyPut<LocalDatabase>(() => LocalDatabase());
@@ -17,6 +19,7 @@ class AppWidget extends StatelessWidget {
   final httpService = Get.put(HttpServiceRepository());
   final authController = Get.put(AuthController());
   final userRepository = Get.put(UserRepository());
+  final loadingController = Get.put(LoadingController());
 
   @override
   Widget build(BuildContext context) {

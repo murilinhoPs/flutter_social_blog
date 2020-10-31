@@ -3,6 +3,9 @@ import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
 import 'package:challenge_bt_app/app/global/custom_dio/custom_dio.dart';
 import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
 import 'package:challenge_bt_app/app/global/widgets/input_field.dart';
+import 'package:challenge_bt_app/app/global/widgets/loading_indicator.dart';
+import 'package:challenge_bt_app/app/modules/home/controllers/response_home_ctrl.dart';
+import 'package:challenge_bt_app/app/modules/log_in/controllers/loading_controller.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -11,16 +14,19 @@ import 'package:get/get.dart';
 import 'controllers/login_form_controller.dart';
 
 class LoginPage extends StatelessWidget {
-  final loginController = Get.put(LoginFormController());
+  final _loginController = Get.put(LoginFormController());
+  final _loadingController = Get.find<LoadingController>();
 
   _onSubmit(context) {
+    _loadingController.setIsLoading(true);
+
     FocusScopeNode currentFocus = FocusScope.of(context);
 
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
 
-    loginController.verifyFieldsToLogin();
+    _loginController.verifyFieldsToLogin();
   }
 
   Widget _buttons(context) {
@@ -59,17 +65,23 @@ class LoginPage extends StatelessWidget {
             ),
             SizedBox(
               height: 40,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    EdgeInsets.symmetric(horizontal: 40),
+              child: Obx(
+                () => ElevatedButton(
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                      EdgeInsets.symmetric(horizontal: 40),
+                    ),
                   ),
+                  child: _loadingController.isLoading.value
+                      ? LoadingIndicator(
+                          color: AlwaysStoppedAnimation<Color>(AppColors.textWhite),
+                        )
+                      : Text(
+                          'Entrar',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                  onPressed: () => _onSubmit(context),
                 ),
-                child: Text(
-                  'Entrar',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () => _onSubmit(context),
               ),
             ),
           ],
@@ -105,12 +117,12 @@ class LoginPage extends StatelessWidget {
                     width: Get.context.mediaQuerySize.width * 0.85,
                     child: Obx(
                       () => InputField(
-                        clearError: loginController.clearErrors,
-                        hasError: loginController.canCheckErrorValue,
+                        clearError: _loginController.clearErrors,
+                        hasError: _loginController.canCheckErrorValue,
                         labelText: "Email ou usuário",
                         obscureTxt: false,
-                        onChanged: loginController.setUserOrEmail,
-                        setErrorTxt: loginController.verifyUser,
+                        onChanged: _loginController.setUserOrEmail,
+                        setErrorTxt: _loginController.verifyUser,
                       ),
                     ),
                   ),
@@ -119,12 +131,12 @@ class LoginPage extends StatelessWidget {
                     width: Get.context.mediaQuerySize.width * 0.85,
                     child: Obx(
                       () => InputField(
-                          clearError: loginController.clearErrors,
-                          hasError: loginController.canCheckErrorValue,
+                          clearError: _loginController.clearErrors,
+                          hasError: _loginController.canCheckErrorValue,
                           labelText: "Senha",
                           obscureTxt: true,
-                          onChanged: loginController.setPassword,
-                          setErrorTxt: loginController.verifyPassword,
+                          onChanged: _loginController.setPassword,
+                          setErrorTxt: _loginController.verifyPassword,
                           submit: (v) => _onSubmit(context)),
                     ),
                   ),

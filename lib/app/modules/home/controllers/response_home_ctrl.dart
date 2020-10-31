@@ -17,7 +17,7 @@ class HomeController extends GetxController {
   }
 
   getUserInfo() async {
-    final user = await _userRepository.getUser();
+    var user = await _userRepository.getUser();
 
     userImage.value = user.image.url;
   }
