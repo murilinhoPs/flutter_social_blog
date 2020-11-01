@@ -1,5 +1,3 @@
-import 'package:challenge_bt_app/app/global/models/user_model.dart';
-
 class AllPostsModel {
   PostFromAll post;
 

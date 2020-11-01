@@ -2,7 +2,6 @@ import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
 import 'package:challenge_bt_app/app/global/widgets/input_field.dart';
 import 'package:challenge_bt_app/app/global/widgets/loading_indicator.dart';
 import 'package:challenge_bt_app/app/modules/home/controllers/create_post_ctrl.dart';
-import 'package:challenge_bt_app/app/modules/home/home_page.dart';
 import 'package:challenge_bt_app/app/modules/log_in/controllers/loading_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
