@@ -1,26 +1,34 @@
-import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
-import 'package:challenge_bt_app/app/modules/sign_up/controllers/create_user_ctrl.dart';
-import 'package:challenge_bt_app/app/modules/sign_up/controllers/image_select_ctrl.dart';
+import 'package:challenge_bt_app/app/global/widgets/input_field.dart';
+import 'package:challenge_bt_app/app/global/widgets/loading_indicator.dart';
 import 'package:challenge_bt_app/app/modules/sign_up/controllers/signup_validation_ctrl.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:challenge_bt_app/app/modules/sign_up/controllers/image_select_ctrl.dart';
+import 'package:challenge_bt_app/app/modules/sign_up/controllers/create_user_ctrl.dart';
+import 'package:challenge_bt_app/app/global/controllers/loading_controller.dart';
+import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignupPage extends StatelessWidget {
+  final _loadingController = Get.find<LoadingController>();
   final _imageSelectCtrl = Get.find<ImageSelectController>();
   final _formController = Get.find<SignupFormController>();
   final _createUserCtrl = Get.find<CreateUserController>();
 
-  onSubmit(context) {
+  _onSubmit(context) {
+    _loadingController.setIsLoading(true);
+
     FocusScopeNode currentFocus = FocusScope.of(context);
 
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
+
+    _createUserCtrl.verifyFieldsToSignup();
   }
 
-  Widget _buttons() {
+  Widget _buttons(context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -29,6 +37,7 @@ class SignupPage extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
+          color: AppColors.backgroundColor,
           border: Border(
             top: BorderSide(
               color: Color(0xFF393e46),
@@ -52,14 +61,25 @@ class SignupPage extends StatelessWidget {
                   EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 ),
               ),
-              child: SizedBox(
-                width: 80,
-                child: Text(
-                  'Cadastrar',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              child: Obx(
+                () => SizedBox(
+                  width: 80,
+                  child: _loadingController.isLoading.value
+                      ? Container(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          height: 20,
+                          width: 20,
+                          child: LoadingIndicator(
+                            color: AlwaysStoppedAnimation<Color>(AppColors.textWhite),
+                          ),
+                        )
+                      : Text(
+                          'Cadastrar',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () => _onSubmit(context),
             )
           ],
         ),
@@ -85,7 +105,10 @@ class SignupPage extends StatelessWidget {
           Align(
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: Get.context.mediaQuerySize.height * 0.1),
+              physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 1),
@@ -99,34 +122,62 @@ class SignupPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 30),
-                  // SizedBox(
-                  //   height: 80,
-                  //   width: Get.context.mediaQuerySize.width * 0.85,
-                  //   child: InputField(labelText: "Nome de usuário", obscureTxt: false),
-                  // ),
-                  // SizedBox(
-                  //   height: 80,
-                  //   width: Get.context.mediaQuerySize.width * 0.85,
-                  //   child: InputField(labelText: "Email", obscureTxt: false),
-                  // ),
-                  // SizedBox(
-                  //   height: 70,
-                  //   width: Get.context.mediaQuerySize.width * 0.85,
-                  //   child: InputField(labelText: "Senha", obscureTxt: true),
-                  // ),
+                  SizedBox(
+                    height: 80,
+                    width: Get.context.mediaQuerySize.width * 0.85,
+                    child: Obx(
+                      () => InputField(
+                        clearError: _formController.clearErrors,
+                        hasError: _formController.canCheckErrorValue,
+                        labelText: "Username",
+                        obscureTxt: false,
+                        onChanged: _formController.setUsername,
+                        setErrorTxt: _formController.validateUsername,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 80,
+                    width: Get.context.mediaQuerySize.width * 0.85,
+                    child: Obx(
+                      () => InputField(
+                        clearError: _formController.clearErrors,
+                        hasError: _formController.canCheckErrorValue,
+                        labelText: "Email",
+                        obscureTxt: false,
+                        onChanged: _formController.setEmail,
+                        setErrorTxt: _formController.validateEmail,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 80,
+                    width: Get.context.mediaQuerySize.width * 0.85,
+                    child: Obx(
+                      () => InputField(
+                        clearError: _formController.clearErrors,
+                        hasError: _formController.canCheckErrorValue,
+                        labelText: "Senha",
+                        obscureTxt: true,
+                        onChanged: _formController.setPassword,
+                        setErrorTxt: _formController.validatePassword,
+                        submit: (v) => _onSubmit(context),
+                      ),
+                    ),
+                  ),
                   Column(
+                    mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
                         child: Obx(
                           () => !_imageSelectCtrl.hasImageValue
                               ? Text('Escolha uma imagem ...')
-                              : Image.file(
-                                  _imageSelectCtrl.imageValue,
-                                  height: _imageSelectCtrl.hasErrorValue
-                                      ? 0
-                                      : Get.context.mediaQuerySize.height * 0.25,
-                                  fit: BoxFit.cover,
+                              : CircleAvatar(
+                                  radius: 50,
+                                  backgroundImage: FileImage(
+                                    _imageSelectCtrl.imageValue,
+                                  ),
                                 ),
                         ),
                       ),
@@ -160,7 +211,7 @@ class SignupPage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
                           child: _imageSelectCtrl.hasErrorValue
                               ? Text(
-                                  'Imagem deve ser menor que 5mb',
+                                  _imageSelectCtrl.errorTextValue,
                                   style: TextStyle(color: Colors.red),
                                 )
                               : Container(),
@@ -172,7 +223,7 @@ class SignupPage extends StatelessWidget {
               ),
             ),
           ),
-          _buttons()
+          _buttons(context)
         ],
       ),
     );

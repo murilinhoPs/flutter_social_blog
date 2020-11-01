@@ -13,7 +13,7 @@ class HttpServiceController extends GetxController {
   }
 
   void showWarning(
-      {String mensagem = 'Houve um erro na requisição, tente novamente: ',
+      {String mensagem = 'Houve um erro na requisição: ',
       String errorMessage = '',
       String title = 'Erro!'}) {
     GetPlatform.isAndroid

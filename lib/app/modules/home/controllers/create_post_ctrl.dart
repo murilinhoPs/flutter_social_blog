@@ -1,5 +1,7 @@
+import 'package:challenge_bt_app/app/global/custom/api_consts.dart';
 import 'package:challenge_bt_app/app/global/repositories/http_service_repository.dart';
 import 'package:challenge_bt_app/app/global/controllers/loading_controller.dart';
+import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
 import 'package:get/get.dart';
 
 class CreatePostController {
@@ -45,18 +47,23 @@ class CreatePostController {
 
     if (hasError) return Get.find<LoadingController>().setIsLoading(false);
 
-    print(hasError);
+    if (!hasError) {
+      int userId = await Get.find<LocalDatabase>().getItem(USERID);
 
-    //   if (!hasError) {
-    //     int userId = await Get.find<LocalDatabase>().getItem(USERID);
+      var response = await _httpServiceRepository.post('/posts/$userId', {'post': postContent});
 
-    //     var response = await _httpServiceRepository.post('/posts/$userId', {'post': postContent});
+      Get.find<LoadingController>().setIsLoading(false);
 
-    //     Get.find<LoadingController>().setIsLoading(false);
+      print(response);
 
-    //     print(response);
+      navigator.pop();
+    }
+  }
 
-    //     navigator.pop();
-    //   }
+  cancelOperation() {
+    setPostContent('');
+    setHasError(false);
+    clearErrors();
+    navigator.pop();
   }
 }

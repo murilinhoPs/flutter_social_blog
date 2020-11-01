@@ -33,6 +33,7 @@ class LoginPage extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
+          color: AppColors.backgroundColor,
           border: Border(
             top: BorderSide(
               color: Color(0xFF393e46),

@@ -68,7 +68,6 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.purple,
-        elevation: 0.0,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(

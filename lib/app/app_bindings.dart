@@ -13,7 +13,7 @@ class AppBindings extends Bindings {
   void dependencies() {
     Get.lazyPut(() => HttpServiceController());
     Get.lazyPut(() => HttpServiceRepository());
-    Get.lazyPut(() => ProfileController());
+    Get.lazyPut(() => ProfileController(), fenix: true);
     Get.lazyPut(() => LoadingController());
     Get.lazyPut(() => GlobalDio());
     Get.put(LocalDatabase());

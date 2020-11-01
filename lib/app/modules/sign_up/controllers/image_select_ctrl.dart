@@ -9,18 +9,19 @@ class ImageSelectController extends GetxController {
 
   var image = File('').obs;
   File get imageValue => image.value;
-
   void setImage(File file) => image.value = file;
-
-  var hasImage = false.obs;
-  bool get hasImageValue => hasImage.value;
-
-  void setHasImage(bool value) => hasImage.value = value;
 
   var hasError = false.obs;
   bool get hasErrorValue => hasError.value;
-
   void setHasError(bool value) => hasError.value = value;
+
+  var errorText = ''.obs;
+  String get errorTextValue => errorText.value;
+  void setErrorText(String value) => errorText.value = value;
+
+  var hasImage = false.obs;
+  bool get hasImageValue => hasImage.value;
+  void setHasImage(bool value) => hasImage.value = value;
 
   Future getImage() async {
     setHasError(false);
@@ -43,12 +44,17 @@ class ImageSelectController extends GetxController {
       if (imageMb >= 5.0) {
         setImage(File(''));
 
+        setHasImage(false);
+
+        setErrorText('Imagem deve ser menor que 5mb');
+
         setHasError(true);
       }
     } else {
       setHasImage(false);
 
-      return Get.find<HttpServiceController>().showWarning(mensagem: 'Nenhuma imagem selecionada');
+      return Get.find<HttpServiceController>()
+          .showWarning(mensagem: 'Nenhuma imagem selecionada', title: 'Aviso!');
     }
   }
 }

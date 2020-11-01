@@ -37,7 +37,7 @@ class PostDialog extends StatelessWidget {
             size: 26.0,
             color: AppColors.textOrange,
           ),
-          onPressed: () => navigator.pop(),
+          onPressed: () => _postController.cancelOperation(),
         ),
       ),
       body: Container(

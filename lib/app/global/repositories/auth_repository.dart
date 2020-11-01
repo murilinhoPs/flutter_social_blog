@@ -25,9 +25,7 @@ class AuthRepository {
     try {
       var response = await _httpService.post('/auth/login', data: loginData);
 
-      print(response);
-
-      if (!response.isNull) if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
         LoginResponseModel loginResponse = LoginResponseModel.fromJson(response.data);
 
         await localDb.setItemString(ACCESSTOKEN, loginResponse.accessToken);
@@ -36,6 +34,22 @@ class AuthRepository {
 
         token = await localDb.getItem(ACCESSTOKEN);
         refresh = await localDb.getItem(REFRESHTOKEN);
+
+        print('User: ${loginResponse.username} de Id:  ${loginResponse.userId}');
+
+        return loginResponse;
+      }
+    } on DioError catch (e) {
+      return e;
+    }
+  }
+
+  Future signup(FormData signupData) async {
+    try {
+      var response = await _httpService.post('/users', data: signupData);
+
+      if (response.statusCode == 201) {
+        LoginResponseModel loginResponse = LoginResponseModel.fromJson(response.data);
 
         print('User: ${loginResponse.username} de Id:  ${loginResponse.userId}');
 

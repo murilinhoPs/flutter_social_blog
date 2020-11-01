@@ -7,7 +7,7 @@ class SignupBindings extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => SignupFormController());
-    Get.lazyPut(() => CreateUserController());
     Get.put(ImageSelectController());
+    Get.put(CreateUserController());
   }
 }
