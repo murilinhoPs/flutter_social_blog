@@ -46,7 +46,7 @@ class UserFromPost {
   int id;
   String username;
   String email;
-  Image image;
+  ImagePost image;
 
   UserFromPost({this.id, this.username, this.email, this.image});
 
@@ -54,7 +54,7 @@ class UserFromPost {
     id = json['id'];
     username = json['username'];
     email = json['email'];
-    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
+    image = json['image'] != null ? new ImagePost.fromJson(json['image']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +65,25 @@ class UserFromPost {
     if (this.image != null) {
       data['image'] = this.image.toJson();
     }
+    return data;
+  }
+}
+
+class ImagePost {
+  int id;
+  String path;
+
+  ImagePost({this.id, this.path});
+
+  ImagePost.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    path = json['path'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['path'] = this.path;
     return data;
   }
 }

@@ -1,16 +1,19 @@
 import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
+import 'package:challenge_bt_app/app/global/utils/logout.dart';
+import 'package:challenge_bt_app/app/modules/home/controllers/check_user_post.dart';
 import 'package:challenge_bt_app/app/modules/home/controllers/response_home_ctrl.dart';
+import 'package:challenge_bt_app/app/modules/home/widgets/post_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   final _homeController = Get.put(HomeController());
+  final _checkUserPost = Get.put(CheckUserPost());
 
   Widget post(int i) {
     return Container(
       alignment: Alignment.center,
-      height: 100,
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       decoration: BoxDecoration(
         border: Border(
@@ -26,14 +29,9 @@ class HomePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: Obx(
-              () => Container(
-                height: 45,
-                width: 45,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.grey,
-                ),
-                child: Image.network(_homeController.postagensValue[i].post.user.image.url,
+              () => CircleAvatar(
+                backgroundImage: NetworkImage(
+                    _homeController.postagensValue[i].post.user.image.path,
                     scale: 2.0),
               ),
             ),
@@ -47,7 +45,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text(
                     '@' + _homeController.postagensValue[i].post.user.username,
-                    style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
                   Text(_homeController.postagensValue[i].post.content),
@@ -55,6 +53,11 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
+          Obx(
+            () => _checkUserPost.localDbIdValue == _homeController.postagensValue[i].post.id
+                ? _checkUserPost.checkUserWidget(_homeController.postagensValue[i].post.id)
+                : Container(),
+          )
         ],
       ),
     );
@@ -85,16 +88,23 @@ class HomePage extends StatelessWidget {
               color: AppColors.textLightOrange,
               size: 28.0,
             ),
-            onPressed: () => Get.offNamed('/login'),
+            onPressed: () => LogOut.logout().then((value) => Get.offNamed('/login')),
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(FontAwesome.pencil),
+          onPressed: () => Get.to(PostDialog(), transition: Transition.downToUp)),
       body: Padding(
         padding: const EdgeInsets.only(top: 0.0),
         child: Obx(
-          () => ListView.builder(
-            itemCount: _homeController.postagensValue.length,
-            itemBuilder: (context, i) => post(i),
+          () => RefreshIndicator(
+            onRefresh: () async => await _homeController.getPosts(),
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: _homeController.postagensValue.length,
+              itemBuilder: (context, i) => post(i),
+            ),
           ),
         ),
       ),

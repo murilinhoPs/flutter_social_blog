@@ -1,10 +1,14 @@
+import 'package:challenge_bt_app/app/global/custom/api_consts.dart';
 import 'package:challenge_bt_app/app/global/models/all_posts.dart';
+import 'package:challenge_bt_app/app/global/repositories/http_service_repository.dart';
 import 'package:challenge_bt_app/app/global/repositories/user_repository.dart';
+import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
 import 'package:challenge_bt_app/app/modules/profile/controllers/profile_controller.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   final _userRepository = Get.find<UserRepository>();
+  final _httpServiceRepository = Get.find<HttpServiceRepository>();
 
   var userImage = ''.obs;
   String get userImageValue => userImage.value;
