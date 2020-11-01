@@ -20,18 +20,18 @@ class AuthController {
   String refresh;
 
   Future login(Map<String, dynamic> loginData) async {
-    // await localDb.deleteItem(REFRESHTOKEN);
-
     refresh = await localDb.getItem(REFRESHTOKEN);
 
     try {
       var response = await _httpService.post('/auth/login', data: loginData);
 
+      print(response);
+
       if (response.statusCode == 200) {
         LoginResponseModel loginResponse = LoginResponseModel.fromJson(response.data);
 
         localDb.setItemString(ACCESSTOKEN, loginResponse.accessToken);
-        if (refresh == null) localDb.setItemString(REFRESHTOKEN, loginResponse.refreshToken);
+        localDb.setItemString(REFRESHTOKEN, loginResponse.refreshToken);
         localDb.setItemInt(USERID, loginResponse.userId);
 
         token = await localDb.getItem(ACCESSTOKEN);
@@ -39,10 +39,10 @@ class AuthController {
 
         print('User: ${loginResponse.username} de Id:  ${loginResponse.userId}');
 
-        Get.toNamed('/home');
-
         return loginResponse;
       }
-    } on DioError catch (e) {}
+    } on DioError catch (e) {
+      return e;
+    }
   }
 }

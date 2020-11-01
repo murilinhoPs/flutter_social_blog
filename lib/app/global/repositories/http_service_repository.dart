@@ -16,7 +16,31 @@ class HttpServiceRepository implements IHttpServices {
     _httpController.changeState(FetchState.isLoading);
 
     try {
-      var response = await _globalDio.dio.get(urlPath).timeout(
+      var response = await _globalDio.dio.get(urlPath);
+      // .timeout(
+      //   Duration(seconds: 30),
+      //   onTimeout: () {
+      //     _httpController.changeState(FetchState.errorLoading);
+      //     return;
+      //   },
+      // );
+
+      print(response.data);
+
+      return response.data;
+    } on DioError catch (err) {
+      // _httpController.changeState(FetchState.errorLoading);
+
+      throw "There's something wrong with connection: " + err.toString();
+    }
+  }
+
+  @override
+  Future post(String urlPath, Map<String, dynamic> bodyData, {Options options}) async {
+    _httpController.changeState(FetchState.isLoading);
+
+    try {
+      var response = await _globalDio.dio.post(urlPath, data: bodyData).timeout(
         Duration(seconds: 30),
         onTimeout: () {
           _httpController.changeState(FetchState.errorLoading);
@@ -33,11 +57,32 @@ class HttpServiceRepository implements IHttpServices {
   }
 
   @override
-  Future post(String urlPath, Map<String, dynamic> bodyData, {Options options}) async {
+  Future put(String urlPath, Map<String, dynamic> bodyData, {Options options}) async {
     _httpController.changeState(FetchState.isLoading);
 
     try {
-      var response = await _globalDio.dio.post(urlPath, data: bodyData).timeout(
+      var response = await _globalDio.dio.put(urlPath, data: bodyData).timeout(
+        Duration(seconds: 30),
+        onTimeout: () {
+          _httpController.changeState(FetchState.errorLoading);
+          return;
+        },
+      );
+
+      return response.data;
+    } on DioError catch (err) {
+      _httpController.changeState(FetchState.errorLoading);
+
+      throw "There's something wrong with connection: " + err.toString();
+    }
+  }
+
+  @override
+  Future delete(String urlPath, {Options options}) async {
+    _httpController.changeState(FetchState.isLoading);
+
+    try {
+      var response = await _globalDio.dio.delete(urlPath).timeout(
         Duration(seconds: 30),
         onTimeout: () {
           _httpController.changeState(FetchState.errorLoading);

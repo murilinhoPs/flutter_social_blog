@@ -46,7 +46,7 @@ class CustomInterceptors implements InterceptorsWrapper {
 
   @override
   Future onResponse(Response response) async {
-    print("Response: ${response.statusCode} -> Path: ${response.data}");
+    print("Response: ${response?.statusCode} -> Path: ${response.data}");
 
     return response;
   }
@@ -54,10 +54,15 @@ class CustomInterceptors implements InterceptorsWrapper {
   @override
   Future onError(DioError err) async {
     print(
-        "Error: ${err.response.statusCode} ->  Data: ${err.response.data["message"]} -> Path: ${err.request.path}");
+        "Error: ${err.response?.statusCode} ->  Data: ${err.response?.data} -> Path: ${err.request.path}");
 
-    if (err.response.statusCode >= 400)
-      Get.find<HttpServiceController>().showWarning(errorMessage: err.response.data["message"]);
+    if (err.response != null) if (err.response.statusCode >= 400) {
+      Get.find<HttpServiceController>().showWarning(errorMessage: err.response?.data["message"]);
+
+      if (!(err.response.data is List)) if (err.response.data['message'] ==
+          'Refresh token errado ou inválido. Faça login novamente')
+        await Get.find<LocalDatabase>().deleteAll();
+    }
 
     return err;
   }

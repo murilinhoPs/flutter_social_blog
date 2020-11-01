@@ -1,5 +1,6 @@
 import 'package:challenge_bt_app/app/global/custom/api_consts.dart';
 import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
+import 'package:challenge_bt_app/app/modules/log_in/controllers/loading_controller.dart';
 import 'package:get/get.dart';
 
 class CheckUserController extends GetxController {
@@ -18,13 +19,15 @@ class CheckUserController extends GetxController {
     String refreshToken = await localDb.getItem(REFRESHTOKEN);
     int id = await localDb.getItem(USERID);
 
-    print(token + ' ' + refreshToken + ' ->  ' + id.toString());
+    await Future.delayed(const Duration(seconds: 3));
 
-    await Future.delayed(const Duration(seconds: 5));
+    if (token != null) {
+      print(token + ' refresh: ' + refreshToken + ' ->  ' + id.toString());
 
-    if (token == null)
+      await Get.find<LoadingController>().getUserInfos();
+
       return Get.offNamed('/home');
-    else
+    } else
       return Get.offNamed('/login');
   }
 }

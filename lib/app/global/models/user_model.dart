@@ -1,9 +1,11 @@
+import 'package:challenge_bt_app/app/global/models/posts_model.dart';
+
 class UserModel {
   int id;
   String username;
   String email;
   Image image;
-  List<Posts> posts;
+  List<PostModel> posts;
   Bio bio;
 
   UserModel({this.id, this.username, this.email, this.image, this.posts, this.bio});
@@ -14,9 +16,9 @@ class UserModel {
     email = json['email'];
     image = json['image'] != null ? new Image.fromJson(json['image']) : null;
     if (json['posts'] != null) {
-      posts = new List<Posts>();
+      posts = new List<PostModel>();
       json['posts'].forEach((v) {
-        posts.add(new Posts.fromJson(v));
+        posts.add(new PostModel.fromJson(v));
       });
     }
     bio = json['bio'] != null ? new Bio.fromJson(json['bio']) : null;
@@ -55,43 +57,6 @@ class Image {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['url'] = this.url;
-    return data;
-  }
-}
-
-class Posts {
-  Post post;
-
-  Posts({this.post});
-
-  Posts.fromJson(Map<String, dynamic> json) {
-    post = json['post'] != null ? new Post.fromJson(json['post']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.post != null) {
-      data['post'] = this.post.toJson();
-    }
-    return data;
-  }
-}
-
-class Post {
-  int id;
-  String post;
-
-  Post({this.id, this.post});
-
-  Post.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    post = json['post'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['post'] = this.post;
     return data;
   }
 }

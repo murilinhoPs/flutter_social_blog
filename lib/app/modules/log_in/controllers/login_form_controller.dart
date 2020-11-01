@@ -62,15 +62,25 @@ class LoginFormController extends GetxController {
 
     if (!hasError) {
       if (CheckEmail.isEmail(userOrEmailValue)) {
+        await Get.find<AuthController>()
+            .login({"email": userOrEmailValue, "password": passwordValue});
+        await _loadingController.getUserInfos();
+
         _loadingController.setIsLoading(false);
 
-        Get.find<AuthController>().login({"email": userOrEmailValue, "password": passwordValue});
+        Get.toNamed('/home');
 
         return;
       }
-      // _loadingController.setIsLoading(false);
 
-      Get.find<AuthController>().login({"username": userOrEmailValue, "password": passwordValue});
+      await Get.find<AuthController>()
+          .login({"username": userOrEmailValue, "password": passwordValue});
+
+      await _loadingController.getUserInfos();
+
+      _loadingController.setIsLoading(false);
+
+      Get.toNamed('/home');
     }
   }
 }

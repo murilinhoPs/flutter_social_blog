@@ -11,21 +11,27 @@ class LocalDatabase {
     return key;
   }
 
-  void setItemString(String keyName, String keyValue) async {
+  Future setItemString(String keyName, String keyValue) async {
     prefs = await SharedPreferences.getInstance();
 
-    await prefs.setString(keyName, keyValue);
+    return await prefs.setString(keyName, keyValue);
   }
 
-  void setItemInt(String keyName, int keyValue) async {
+  Future setItemInt(String keyName, int keyValue) async {
     prefs = await SharedPreferences.getInstance();
 
-    await prefs.setInt(keyName, keyValue);
+    return await prefs.setInt(keyName, keyValue);
   }
 
   Future<bool> deleteItem(String keyName) async {
     prefs = await SharedPreferences.getInstance();
 
     return await prefs.remove(keyName);
+  }
+
+  Future<bool> deleteAll() async {
+    prefs = await SharedPreferences.getInstance();
+
+    return await prefs.clear();
   }
 }

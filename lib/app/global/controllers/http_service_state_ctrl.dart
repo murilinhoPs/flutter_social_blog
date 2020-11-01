@@ -12,11 +12,12 @@ class HttpServiceController extends GetxController {
     if (fetchState == FetchState.errorLoading) showWarning();
   }
 
-  void showWarning({String errorMessage}) {
+  void showWarning(
+      {String mensagem = 'Houve um erro na requisição, tente novamente: ', String errorMessage}) {
     GetPlatform.isAndroid
         ? Get.snackbar(
             'Erro',
-            'Houve um erro na requisição, tente novamente: ' + errorMessage,
+            mensagem + errorMessage,
             duration: Duration(seconds: 5),
             snackPosition: SnackPosition.BOTTOM,
             backgroundGradient: null,
@@ -29,7 +30,7 @@ class HttpServiceController extends GetxController {
           )
         : Get.snackbar(
             'Erro',
-            'Houve um erro na requisição, tente novamente: ' + errorMessage,
+            mensagem + errorMessage,
             duration: Duration(seconds: 5),
             snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.white.withOpacity(0.7),

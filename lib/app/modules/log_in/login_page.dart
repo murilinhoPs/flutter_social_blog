@@ -1,12 +1,7 @@
-import 'package:challenge_bt_app/app/global/custom/api_consts.dart';
 import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
-import 'package:challenge_bt_app/app/global/custom_dio/custom_dio.dart';
-import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
 import 'package:challenge_bt_app/app/global/widgets/input_field.dart';
 import 'package:challenge_bt_app/app/global/widgets/loading_indicator.dart';
-import 'package:challenge_bt_app/app/modules/home/controllers/response_home_ctrl.dart';
 import 'package:challenge_bt_app/app/modules/log_in/controllers/loading_controller.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -53,15 +48,7 @@ class LoginPage extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.lightOrange),
               ),
-              onPressed: () async {
-                int id = await Get.find<LocalDatabase>().getItem(USERID);
-
-                try {
-                  await Get.find<GlobalDio>().dio.get('/users/$id');
-                } on DioError catch (e) {
-                  return e;
-                } //Get.toNamed('/signup'),
-              },
+              onPressed: () => Get.toNamed('/signup'),
             ),
             SizedBox(
               height: 40,
@@ -69,17 +56,25 @@ class LoginPage extends StatelessWidget {
                 () => ElevatedButton(
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                      EdgeInsets.symmetric(horizontal: 40),
+                      EdgeInsets.symmetric(horizontal: 30),
                     ),
                   ),
-                  child: _loadingController.isLoading.value
-                      ? LoadingIndicator(
-                          color: AlwaysStoppedAnimation<Color>(AppColors.textWhite),
-                        )
-                      : Text(
-                          'Entrar',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
+                  child: SizedBox(
+                    width: 50,
+                    child: _loadingController.isLoading.value
+                        ? Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            height: 20,
+                            width: 20,
+                            child: LoadingIndicator(
+                              color: AlwaysStoppedAnimation<Color>(AppColors.textWhite),
+                            ),
+                          )
+                        : Text(
+                            'Entrar',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                  ),
                   onPressed: () => _onSubmit(context),
                 ),
               ),

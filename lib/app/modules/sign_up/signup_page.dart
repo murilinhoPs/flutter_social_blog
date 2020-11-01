@@ -1,10 +1,26 @@
+import 'package:challenge_bt_app/app/global/controllers/http_service_state_ctrl.dart';
 import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
 import 'package:challenge_bt_app/app/global/widgets/input_field.dart';
+import 'package:challenge_bt_app/app/modules/sign_up/controllers/image_select_ctrl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignupPage extends StatelessWidget {
+  final _imageSelectCtrl = Get.put(ImageSelectController());
+  final _imagePicker = ImagePicker();
+
+  Future _getImage() async {
+    var image = await _imagePicker.getImage(source: ImageSource.gallery);
+
+    if (image != null)
+      return image;
+    else
+      Get.find<HttpServiceController>().showWarning(mensagem: 'Nenhuma imagem selecionada');
+  }
+
   Widget _buttons() {
     return Align(
       alignment: Alignment.bottomCenter,
@@ -31,20 +47,39 @@ class SignupPage extends StatelessWidget {
               ),
               onPressed: () => Get.offNamed('/login'),
             ),
-            SizedBox(
-              height: 40,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    EdgeInsets.symmetric(horizontal: 40),
+            Column(
+              children: [
+                Obx(
+                  () => _imageSelectCtrl.imageValue == null
+                      ? Text('Escolha uma imagem ...')
+                      : Image.file(
+                          _imageSelectCtrl.imageValue,
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.fitHeight,
+                        ),
+                ),
+                SizedBox(
+                  height: 40,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.symmetric(horizontal: 40),
+                      ),
+                    ),
+                    child: Text(
+                      'Cadastrar',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () async {
+                      var selectedImage = await _getImage();
+
+                      _imageSelectCtrl.setImage(selectedImage);
+                    },
                   ),
                 ),
-                child: Text(
-                  'Cadastrar',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {},
-              ),
+                Text('vai ser o error text da imagem ao subir')
+              ],
             ),
           ],
         ),
@@ -99,7 +134,31 @@ class SignupPage extends StatelessWidget {
                     width: Get.context.mediaQuerySize.width * 0.85,
                     child: InputField(labelText: "Senha", obscureTxt: true),
                   ),
-                  Text('Vai ser a foto aqui')
+                  Container(
+                    padding: const EdgeInsets.all(10.0),
+                    width: 50,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          EdgeInsets.symmetric(horizontal: 40),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Imagem: ',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Icon(
+                            FontAwesome.angle_down,
+                            size: 26.0,
+                          ),
+                        ],
+                      ),
+                      onPressed: () {},
+                    ),
+                  )
                 ],
               ),
             ),
