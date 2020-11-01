@@ -62,6 +62,8 @@ class CustomInterceptors implements InterceptorsWrapper {
       if (!(err.response.data is List)) if (err.response.data['message'] ==
           'Refresh token errado ou inválido. Faça login novamente')
         await Get.find<LocalDatabase>().deleteAll();
+
+      return err.error;
     }
 
     return err;

@@ -5,12 +5,12 @@ import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 
-class AuthController {
+class AuthRepository {
   final localDb = Get.find<LocalDatabase>();
 
   Dio _httpService;
 
-  AuthController() {
+  AuthRepository() {
     _httpService = Dio();
     _httpService.options.baseUrl = BASEURL;
     _httpService.interceptors.add(CustomInterceptors());
@@ -27,12 +27,12 @@ class AuthController {
 
       print(response);
 
-      if (response.statusCode == 200) {
+      if (!response.isNull) if (response.statusCode == 200) {
         LoginResponseModel loginResponse = LoginResponseModel.fromJson(response.data);
 
-        localDb.setItemString(ACCESSTOKEN, loginResponse.accessToken);
-        localDb.setItemString(REFRESHTOKEN, loginResponse.refreshToken);
-        localDb.setItemInt(USERID, loginResponse.userId);
+        await localDb.setItemString(ACCESSTOKEN, loginResponse.accessToken);
+        await localDb.setItemString(REFRESHTOKEN, loginResponse.refreshToken);
+        await localDb.setItemInt(USERID, loginResponse.userId);
 
         token = await localDb.getItem(ACCESSTOKEN);
         refresh = await localDb.getItem(REFRESHTOKEN);

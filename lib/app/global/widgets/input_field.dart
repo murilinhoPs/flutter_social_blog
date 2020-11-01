@@ -6,6 +6,7 @@ class InputField extends StatelessWidget {
   final String labelText;
   final bool obscureTxt;
   final bool hasError;
+  final bool expands;
   final Function clearError;
   final Function(String) submit;
   final Function(String) onChanged;
@@ -18,7 +19,8 @@ class InputField extends StatelessWidget {
       this.setErrorTxt,
       this.hasError,
       this.clearError,
-      this.submit});
+      this.submit,
+      this.expands = false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class InputField extends StatelessWidget {
       cursorColor: Get.theme.accentColor,
       cursorHeight: 25,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(bottom: 15),
+        contentPadding: EdgeInsets.only(bottom: 5),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         labelText: labelText,
         labelStyle: TextStyle(color: AppColors.textWhite, fontSize: 21),
@@ -44,6 +46,9 @@ class InputField extends StatelessWidget {
       obscureText: obscureTxt,
       onTap: clearError,
       onSubmitted: submit,
+      maxLines: expands ? null : 1,
+      minLines: expands ? null : 1,
+      expands: expands,
     );
   }
 }

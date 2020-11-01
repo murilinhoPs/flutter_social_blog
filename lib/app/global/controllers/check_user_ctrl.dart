@@ -1,6 +1,6 @@
 import 'package:challenge_bt_app/app/global/custom/api_consts.dart';
+import 'package:challenge_bt_app/app/global/repositories/user_repository.dart';
 import 'package:challenge_bt_app/app/global/services/local_db_service.dart';
-import 'package:challenge_bt_app/app/modules/log_in/controllers/loading_controller.dart';
 import 'package:get/get.dart';
 
 class CheckUserController extends GetxController {
@@ -24,7 +24,7 @@ class CheckUserController extends GetxController {
     if (token != null) {
       print(token + ' refresh: ' + refreshToken + ' ->  ' + id.toString());
 
-      await Get.find<LoadingController>().getUserInfos();
+      await Get.find<UserRepository>().getUser();
 
       return Get.offNamed('/home');
     } else

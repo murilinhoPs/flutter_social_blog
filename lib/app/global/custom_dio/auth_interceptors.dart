@@ -28,12 +28,12 @@ class AuthInterceptors implements InterceptorsWrapper {
 
       globalDio.dio.unlock();
 
-      print("Request: ${options.method} -> Path: ${options.path}");
+      print("RequestAuth: ${options.method} -> Path: ${options.path}");
 
       return options;
     }
 
-    print("Request: ${options.method} -> Path: ${options.path}");
+    print("RequestAuth: ${options.method} -> Path: ${options.path}");
 
     return options;
   }
@@ -74,7 +74,7 @@ class AuthInterceptors implements InterceptorsWrapper {
 
   @override
   Future onError(DioError err) async {
-    print('''Error: ${err.response?.statusCode} ->
+    print('''ErrorAuth: ${err.response?.statusCode} ->
     Data: ${err.response?.data}->
     Path: ${err.message}''');
 

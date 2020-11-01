@@ -1,8 +1,8 @@
-import 'package:challenge_bt_app/app/global/controllers/auth_ctrl.dart';
-import 'package:challenge_bt_app/app/global/utils/check_email.dart';
+import 'package:challenge_bt_app/app/global/controllers/loading_controller.dart';
+import 'package:challenge_bt_app/app/global/repositories/auth_repository.dart';
+import 'package:challenge_bt_app/app/global/repositories/user_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-
-import 'loading_controller.dart';
 
 class LoginFormController extends GetxController {
   final _loadingController = Get.find<LoadingController>();
@@ -16,8 +16,8 @@ class LoginFormController extends GetxController {
   String get passwordValue => password.value;
   setPassword(String value) => password.value = value;
 
-  var hasError = false;
-  setHasError(bool value) => value = value;
+  bool hasError = false;
+  setHasError(bool value) => hasError = value;
 
   var canCheckError = false.obs;
   bool get canCheckErrorValue => canCheckError.value;
@@ -42,7 +42,7 @@ class LoginFormController extends GetxController {
         return 'O campo é obrigatório';
       }
 
-      if (passwordValue.length < 7) {
+      if (passwordValue.length < 8) {
         setHasError(true);
 
         return 'Minimo 8 caracteres';
@@ -54,33 +54,38 @@ class LoginFormController extends GetxController {
     return null;
   }
 
-  void verifyFieldsToLogin() async {
+  verifyFieldsToLogin() async {
     canCheckError.value = true;
 
     verifyUser();
     verifyPassword();
 
-    if (!hasError) {
-      if (CheckEmail.isEmail(userOrEmailValue)) {
-        await Get.find<AuthController>()
-            .login({"email": userOrEmailValue, "password": passwordValue});
-        await _loadingController.getUserInfos();
+    if (hasError) return _loadingController.setIsLoading(false);
 
-        _loadingController.setIsLoading(false);
+    if (userOrEmail.value.isEmail) {
+      var authRes = await Get.find<AuthRepository>()
+          .login({"email": userOrEmailValue, "password": passwordValue});
 
-        Get.toNamed('/home');
+      if (authRes is DioError) return _loadingController.setIsLoading(false);
 
-        return;
-      }
-
-      await Get.find<AuthController>()
-          .login({"username": userOrEmailValue, "password": passwordValue});
-
-      await _loadingController.getUserInfos();
+      await Get.find<UserRepository>().getUser();
 
       _loadingController.setIsLoading(false);
 
       Get.toNamed('/home');
+
+      return;
     }
+
+    var authRes = await Get.find<AuthRepository>()
+        .login({"username": userOrEmailValue, "password": passwordValue});
+
+    if (authRes is DioError) return _loadingController.setIsLoading(false);
+
+    await Get.find<UserRepository>().getUser();
+
+    _loadingController.setIsLoading(false);
+
+    Get.toNamed('/home');
   }
 }

@@ -1,7 +1,7 @@
 import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
 import 'package:challenge_bt_app/app/global/widgets/input_field.dart';
 import 'package:challenge_bt_app/app/global/widgets/loading_indicator.dart';
-import 'package:challenge_bt_app/app/modules/log_in/controllers/loading_controller.dart';
+import 'package:challenge_bt_app/app/global/controllers/loading_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -122,17 +122,18 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 70,
+                    height: 80,
                     width: Get.context.mediaQuerySize.width * 0.85,
                     child: Obx(
                       () => InputField(
-                          clearError: _loginController.clearErrors,
-                          hasError: _loginController.canCheckErrorValue,
-                          labelText: "Senha",
-                          obscureTxt: true,
-                          onChanged: _loginController.setPassword,
-                          setErrorTxt: _loginController.verifyPassword,
-                          submit: (v) => _onSubmit(context)),
+                        clearError: _loginController.clearErrors,
+                        hasError: _loginController.canCheckErrorValue,
+                        labelText: "Senha",
+                        obscureTxt: true,
+                        onChanged: _loginController.setPassword,
+                        setErrorTxt: _loginController.verifyPassword,
+                        submit: (v) => _onSubmit(context),
+                      ),
                     ),
                   ),
                 ],

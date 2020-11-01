@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   final _userRepository = Get.find<UserRepository>();
+  final _profileController = Get.find<ProfileController>();
 
   var userImage = ''.obs;
   String get userImageValue => userImage.value;
@@ -23,13 +24,15 @@ class HomeController extends GetxController {
   }
 
   getUserInfo() async {
-    final user = Get.find<ProfileController>().userProfileValue;
+    final user = _profileController.userProfileValue;
 
     userImage.value = user.image.url;
   }
 
   getPosts() async {
     final postsList = await _userRepository.getAllPosts();
+
+    await _userRepository.getUser();
 
     setPostagens(postsList);
   }

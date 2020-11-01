@@ -1,15 +1,15 @@
+import 'package:challenge_bt_app/app/modules/home/controllers/response_home_ctrl.dart';
+import 'package:challenge_bt_app/app/modules/home/controllers/check_user_post.dart';
+import 'package:challenge_bt_app/app/modules/home/widgets/post_dialog.dart';
 import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
 import 'package:challenge_bt_app/app/global/utils/logout.dart';
-import 'package:challenge_bt_app/app/modules/home/controllers/check_user_post.dart';
-import 'package:challenge_bt_app/app/modules/home/controllers/response_home_ctrl.dart';
-import 'package:challenge_bt_app/app/modules/home/widgets/post_dialog.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
-  final _homeController = Get.put(HomeController());
-  final _checkUserPost = Get.put(CheckUserPost());
+  final _homeController = Get.find<HomeController>();
+  final _checkUserPost = Get.find<CheckUserPost>();
 
   Widget post(int i) {
     return Container(
@@ -48,13 +48,13 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
-                  Text(_homeController.postagensValue[i].post.content),
+                  SelectableText(_homeController.postagensValue[i].post.content),
                 ],
               ),
             ),
           ),
           Obx(
-            () => _checkUserPost.localDbIdValue == _homeController.postagensValue[i].post.id
+            () => _checkUserPost.canEdit(_homeController.postagensValue[i].post.id)
                 ? _checkUserPost.checkUserWidget(_homeController.postagensValue[i].post.id)
                 : Container(),
           )
@@ -65,7 +65,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Home page');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.purple,
@@ -93,8 +92,14 @@ class HomePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(FontAwesome.pencil),
-          onPressed: () => Get.to(PostDialog(), transition: Transition.downToUp)),
+        child: Icon(FontAwesome.pencil),
+        onPressed: () => Get.to(
+          PostDialog(),
+          transition: Transition.downToUp,
+          arguments: [_homeController.userImageValue],
+        ),
+      ),
+      // bottomNavigationBar: BottomNavigationBar(items: [BottomNavigationBarItem()],),
       body: Padding(
         padding: const EdgeInsets.only(top: 0.0),
         child: Obx(
@@ -102,6 +107,7 @@ class HomePage extends StatelessWidget {
             onRefresh: () async => await _homeController.getPosts(),
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.only(bottom: 40),
               itemCount: _homeController.postagensValue.length,
               itemBuilder: (context, i) => post(i),
             ),

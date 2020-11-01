@@ -1,12 +1,16 @@
 import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
+import 'package:challenge_bt_app/app/modules/sign_up/controllers/create_user_ctrl.dart';
 import 'package:challenge_bt_app/app/modules/sign_up/controllers/image_select_ctrl.dart';
+import 'package:challenge_bt_app/app/modules/sign_up/controllers/signup_validation_ctrl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
 class SignupPage extends StatelessWidget {
-  final _imageSelectCtrl = Get.put(ImageSelectController());
+  final _imageSelectCtrl = Get.find<ImageSelectController>();
+  final _formController = Get.find<SignupFormController>();
+  final _createUserCtrl = Get.find<CreateUserController>();
 
   onSubmit(context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -40,7 +44,7 @@ class SignupPage extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.lightOrange),
               ),
-              onPressed: () => Get.offNamed('/login'),
+              onPressed: () => navigator.pop(),
             ),
             ElevatedButton(
               style: ButtonStyle(
@@ -84,7 +88,7 @@ class SignupPage extends StatelessWidget {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(vertical: 1),
                     child: Text(
                       'Crie sua Conta',
                       style: TextStyle(
@@ -119,14 +123,16 @@ class SignupPage extends StatelessWidget {
                               ? Text('Escolha uma imagem ...')
                               : Image.file(
                                   _imageSelectCtrl.imageValue,
-                                  height: Get.context.mediaQuerySize.height * 0.25,
+                                  height: _imageSelectCtrl.hasErrorValue
+                                      ? 0
+                                      : Get.context.mediaQuerySize.height * 0.25,
                                   fit: BoxFit.cover,
                                 ),
                         ),
                       ),
                       Container(
                         height: 40,
-                        width: 140,
+                        padding: const EdgeInsets.symmetric(horizontal: 51.0),
                         child: ElevatedButton(
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
@@ -137,7 +143,7 @@ class SignupPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Imagem: ',
+                                'Imagem de perfil: ',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               Icon(
@@ -149,9 +155,16 @@ class SignupPage extends StatelessWidget {
                           onPressed: () async => await _imageSelectCtrl.getImage(),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15.0),
-                        child: Text('vai ser o error text da imagem ao subir'),
+                      Obx(
+                        () => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
+                          child: _imageSelectCtrl.hasErrorValue
+                              ? Text(
+                                  'Imagem deve ser menor que 5mb',
+                                  style: TextStyle(color: Colors.red),
+                                )
+                              : Container(),
+                        ),
                       )
                     ],
                   ),

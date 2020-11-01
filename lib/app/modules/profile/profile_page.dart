@@ -22,29 +22,37 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
       ),
-      body: Center(
-        child: Obx(
-          () => RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Username:' +
-                      _profileController.userProfileValue.username +
-                      ' com id: ' +
-                      _profileController.userProfileValue.id.toString(),
-                ),
-                TextSpan(text: 'Email:' + _profileController.userProfileValue.email),
-                TextSpan(
-                  text: 'Email:' + _profileController.userProfileValue.bio.content,
-                ),
-                TextSpan(
-                    text:
-                        'Postagem1: ' + _profileController.userProfileValue.posts[0].post.content),
-              ],
+      body: Flex(direction: Axis.vertical, children: [
+        Center(
+          child: Obx(
+            () => Column(
+              children: //[
+                  _profileController.userProfileValue.posts
+                      .map(
+                        (post) => Text('Postagem1: ' + post.post.content),
+                      )
+                      .toList(),
+              // RichText(
+              //   text: TextSpan(
+              //     children: [
+              //       TextSpan(
+              //         text: 'Username:' +
+              //             _profileController.userProfileValue.username +
+              //             ' com id: ' +
+              //             _profileController.userProfileValue.id.toString(),
+              //       ),
+              //       TextSpan(text: 'Email:' + _profileController.userProfileValue.email),
+              //       TextSpan(
+              //         text: 'Email:' + _profileController.userProfileValue.bio.content,
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // ],
             ),
           ),
         ),
-      ),
+      ]),
     );
   }
 }
