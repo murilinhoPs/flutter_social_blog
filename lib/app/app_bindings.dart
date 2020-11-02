@@ -16,7 +16,7 @@ class AppBindings extends Bindings {
     Get.lazyPut(() => HttpServiceRepository());
     Get.lazyPut(() => ProfileController(), fenix: true);
     Get.lazyPut(() => GlobalDio());
-    Get.put(() => LoadingController());
+    Get.put(LoadingController());
     Get.put(NavRailController());
     Get.put(LocalDatabase());
     Get.put(AuthRepository());
