@@ -1,7 +1,7 @@
 import 'package:challenge_bt_app/app/global/custom/app_colors.dart';
 import 'package:challenge_bt_app/app/global/widgets/input_field.dart';
 import 'package:challenge_bt_app/app/global/widgets/loading_indicator.dart';
-import 'package:challenge_bt_app/app/modules/home/controllers/create_post_ctrl.dart';
+import 'package:challenge_bt_app/app/modules/home/controllers/post_ctrl.dart';
 import 'package:challenge_bt_app/app/global/controllers/loading_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,8 +9,10 @@ import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
 class PostDialog extends StatelessWidget {
-  final _postController = Get.put(CreatePostController());
+  final _postController = Get.find<PostController>();
   final _loadingController = Get.find<LoadingController>();
+
+  int postId = Get.arguments[1];
 
   _onSubmit(context) {
     _loadingController.setIsLoading(true);
@@ -20,8 +22,10 @@ class PostDialog extends StatelessWidget {
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
-
-    _postController.createPost();
+    if (_postController.methodValue == EnumMethod.POST)
+      _postController.createPost();
+    else
+      _postController.updatePost(Get.arguments[1]);
   }
 
   @override
@@ -37,8 +41,46 @@ class PostDialog extends StatelessWidget {
             size: 26.0,
             color: AppColors.textOrange,
           ),
-          onPressed: () => _postController.cancelOperation(),
+          onPressed: () => _postController.terminatedOperation(),
         ),
+        actions: [
+          Obx(
+            () => _postController.methodValue == EnumMethod.PUT
+                ? IconButton(
+                    splashRadius: 3.0,
+                    icon: Icon(FontAwesome.trash_empty, size: 26.0, color: AppColors.red),
+                    onPressed: () => Get.defaultDialog(
+                      title: 'Deletar postagem!',
+                      middleText: 'Você tem certeza que quer exluir essa postagem?',
+                      confirm: ElevatedButton(
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                              EdgeInsets.symmetric(horizontal: 20),
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(AppColors.red)),
+                        onPressed: () => _postController.deletePost(postId),
+                        child: Text(
+                          'Excluir',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      cancel: TextButton(
+                        child: Text(
+                          'Cancelar',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.lightOrange),
+                        ),
+                        onPressed: () => navigator.pop(),
+                      ),
+                    ),
+
+                    //_postController.deletePost(Get.arguments[1]),
+                  )
+                : Container(),
+          ),
+        ],
       ),
       body: Container(
         margin: EdgeInsets.only(top: 50),
@@ -67,6 +109,7 @@ class PostDialog extends StatelessWidget {
                           obscureTxt: false,
                           onChanged: _postController.setPostContent,
                           setErrorTxt: _postController.validatePost,
+                          initialValue: _postController.postContentValue,
                         ),
                       ),
                     ),

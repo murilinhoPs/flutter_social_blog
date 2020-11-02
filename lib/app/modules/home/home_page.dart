@@ -1,3 +1,4 @@
+import 'package:challenge_bt_app/app/modules/home/controllers/post_ctrl.dart';
 import 'package:challenge_bt_app/app/modules/home/controllers/response_home_ctrl.dart';
 import 'package:challenge_bt_app/app/modules/home/controllers/check_user_post.dart';
 import 'package:challenge_bt_app/app/modules/home/widgets/post_dialog.dart';
@@ -55,7 +56,7 @@ class HomePage extends StatelessWidget {
           ),
           Obx(
             () => _checkUserPost.canEdit(_homeController.postagensValue[i].post.id)
-                ? _checkUserPost.checkUserWidget(_homeController.postagensValue[i].post.id)
+                ? _checkUserPost.checkUserWidget(_homeController.postagensValue[i].post)
                 : Container(),
           )
         ],
@@ -91,19 +92,22 @@ class HomePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(FontAwesome.pencil),
-        onPressed: () => Get.to(
-          PostDialog(),
-          transition: Transition.downToUp,
-          arguments: [_homeController.userImageValue],
-        ),
-      ),
+          child: Icon(FontAwesome.pencil),
+          onPressed: () {
+            Get.find<PostController>().setMethod(EnumMethod.POST);
+
+            Get.to(
+              PostDialog(),
+              transition: Transition.downToUp,
+              arguments: [_homeController.userImageValue, 0],
+            );
+          }),
       // bottomNavigationBar: BottomNavigationBar(items: [BottomNavigationBarItem()],),
       body: Padding(
         padding: const EdgeInsets.only(top: 0.0),
         child: Obx(
           () => RefreshIndicator(
-            onRefresh: () async => await _homeController.getPosts(),
+            onRefresh: () => _homeController.getPosts(),
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(bottom: 40),

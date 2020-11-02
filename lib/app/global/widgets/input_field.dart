@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 class InputField extends StatelessWidget {
   final String labelText;
+  final String initialValue;
   final bool obscureTxt;
   final bool hasError;
   final bool expands;
@@ -20,11 +21,12 @@ class InputField extends StatelessWidget {
       this.hasError,
       this.clearError,
       this.submit,
-      this.expands = false});
+      this.expands = false,
+      this.initialValue = ''});
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       cursorColor: Get.theme.accentColor,
       cursorHeight: 25,
       decoration: InputDecoration(
@@ -45,10 +47,11 @@ class InputField extends StatelessWidget {
       onChanged: onChanged,
       obscureText: obscureTxt,
       onTap: clearError,
-      onSubmitted: submit,
+      onFieldSubmitted: submit,
       maxLines: expands ? null : 1,
       minLines: expands ? null : 1,
       expands: expands,
+      initialValue: initialValue,
     );
   }
 }

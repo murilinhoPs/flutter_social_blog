@@ -24,4 +24,6 @@ class AppColors {
   static const purple = Color(0xFF592269);
 
   static const accentPurple = Color(0xFF461b93);
+
+  static const red = Color(0xFFb32c50);
 }

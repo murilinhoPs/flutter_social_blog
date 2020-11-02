@@ -30,9 +30,9 @@ class HomeController extends GetxController {
   }
 
   getPosts() async {
-    final postsList = await _userRepository.getAllPosts();
+    await Get.find<UserRepository>().getUser();
 
-    await _userRepository.getUser();
+    var postsList = await _userRepository.getAllPosts();
 
     setPostagens(postsList);
   }
