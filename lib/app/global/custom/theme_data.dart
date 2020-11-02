@@ -15,5 +15,10 @@ class CustomTheme {
     primaryColor: AppColors.secondaryOrange,
     accentColor: AppColors.primaryOrange,
     scaffoldBackgroundColor: AppColors.backgroundColor,
+    appBarTheme: AppBarTheme(
+      color: AppColors.appBarColor,
+      brightness: Brightness.dark,
+      iconTheme: IconThemeData(color: AppColors.textWhite),
+    ),
   );
 }

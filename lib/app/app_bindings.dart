@@ -1,4 +1,5 @@
 import 'package:challenge_bt_app/app/global/controllers/http_service_state_ctrl.dart';
+import 'package:challenge_bt_app/app/global/controllers/nav_rail_ctrl.dart';
 import 'package:challenge_bt_app/app/global/custom_dio/custom_dio.dart';
 import 'package:challenge_bt_app/app/global/repositories/auth_repository.dart';
 import 'package:challenge_bt_app/app/global/repositories/http_service_repository.dart';
@@ -14,8 +15,9 @@ class AppBindings extends Bindings {
     Get.lazyPut(() => HttpServiceController());
     Get.lazyPut(() => HttpServiceRepository());
     Get.lazyPut(() => ProfileController(), fenix: true);
-    Get.lazyPut(() => LoadingController());
     Get.lazyPut(() => GlobalDio());
+    Get.put(() => LoadingController());
+    Get.put(NavRailController());
     Get.put(LocalDatabase());
     Get.put(AuthRepository());
     Get.put(UserRepository());

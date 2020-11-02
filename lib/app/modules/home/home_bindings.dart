@@ -7,9 +7,9 @@ import 'package:get/instance_manager.dart';
 class HomeBindings extends Bindings {
   @override
   void dependencies() {
+    Get.put(PostController());
     Get.put(HomeController());
     Get.put(CheckUserPost());
-    Get.put(PostController());
     Get.lazyPut(() => LoadingController(), fenix: true);
   }
 }

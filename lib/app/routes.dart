@@ -1,6 +1,7 @@
 import 'package:challenge_bt_app/app/global/widgets/check_user.dart';
 import 'package:challenge_bt_app/app/modules/home/home_bindings.dart';
 import 'package:challenge_bt_app/app/modules/home/home_page.dart';
+import 'package:challenge_bt_app/app/modules/last_news/last_news_page.dart';
 import 'package:challenge_bt_app/app/modules/log_in/login_page.dart';
 import 'package:challenge_bt_app/app/modules/profile/profile_page.dart';
 import 'package:challenge_bt_app/app/modules/sign_up/signup_bindings.dart';
@@ -36,6 +37,11 @@ class AppRoutes {
     GetPage(
       name: '/profile',
       page: () => ProfilePage(),
+      transition: pageTransition,
+    ),
+    GetPage(
+      name: '/news',
+      page: () => NewsPage(),
       transition: pageTransition,
     ),
   ];

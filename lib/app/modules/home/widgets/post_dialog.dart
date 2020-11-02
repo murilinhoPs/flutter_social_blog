@@ -12,7 +12,7 @@ class PostDialog extends StatelessWidget {
   final _postController = Get.find<PostController>();
   final _loadingController = Get.find<LoadingController>();
 
-  int postId = Get.arguments[1];
+  // int postId = Get.arguments[1];
 
   _onSubmit(context) {
     _loadingController.setIsLoading(true);
@@ -49,35 +49,36 @@ class PostDialog extends StatelessWidget {
                 ? IconButton(
                     splashRadius: 3.0,
                     icon: Icon(FontAwesome.trash_empty, size: 26.0, color: AppColors.red),
-                    onPressed: () => Get.defaultDialog(
-                      title: 'Deletar postagem!',
-                      middleText: 'Você tem certeza que quer exluir essa postagem?',
-                      confirm: ElevatedButton(
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                              EdgeInsets.symmetric(horizontal: 20),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(AppColors.red)),
-                        onPressed: () => _postController.deletePost(postId),
-                        child: Text(
-                          'Excluir',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      cancel: TextButton(
-                        child: Text(
-                          'Cancelar',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.lightOrange),
-                        ),
-                        onPressed: () => navigator.pop(),
-                      ),
-                    ),
+                    onPressed: () {
+                      int userId = Get.arguments[1];
 
-                    //_postController.deletePost(Get.arguments[1]),
-                  )
+                      Get.defaultDialog(
+                        title: 'Deletar postagem!',
+                        middleText: 'Você tem certeza que quer exluir essa postagem?',
+                        confirm: ElevatedButton(
+                          style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                EdgeInsets.symmetric(horizontal: 20),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(AppColors.red)),
+                          onPressed: () => _postController.deletePost(userId),
+                          child: Text(
+                            'Excluir',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        cancel: TextButton(
+                          child: Text(
+                            'Cancelar',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.lightOrange),
+                          ),
+                          onPressed: () => navigator.pop(),
+                        ),
+                      );
+                    })
                 : Container(),
           ),
         ],

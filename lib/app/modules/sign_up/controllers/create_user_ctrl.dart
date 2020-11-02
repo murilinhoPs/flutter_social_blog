@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:challenge_bt_app/app/global/controllers/loading_controller.dart';
 import 'package:challenge_bt_app/app/global/repositories/auth_repository.dart';
 import 'package:challenge_bt_app/app/global/repositories/user_repository.dart';

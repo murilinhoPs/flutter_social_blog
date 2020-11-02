@@ -1,3 +1,4 @@
+import 'package:challenge_bt_app/app/global/widgets/nav_rail.dart';
 import 'package:challenge_bt_app/app/modules/home/controllers/post_ctrl.dart';
 import 'package:challenge_bt_app/app/modules/home/controllers/response_home_ctrl.dart';
 import 'package:challenge_bt_app/app/modules/home/controllers/check_user_post.dart';
@@ -20,7 +21,7 @@ class HomePage extends StatelessWidget {
         border: Border(
           bottom: BorderSide(
             width: 1.0,
-            color: Color(0xFF526F9E),
+            color: AppColors.blue,
           ),
         ),
       ),
@@ -68,7 +69,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.purple,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
@@ -103,19 +103,29 @@ class HomePage extends StatelessWidget {
             );
           }),
       // bottomNavigationBar: BottomNavigationBar(items: [BottomNavigationBarItem()],),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 0.0),
-        child: Obx(
-          () => RefreshIndicator(
-            onRefresh: () => _homeController.getPosts(),
-            child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.only(bottom: 40),
-              itemCount: _homeController.postagensValue.length,
-              itemBuilder: (context, i) => post(i),
+      body: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          CustomNavigationRails(),
+          VerticalDivider(
+            thickness: 1.5,
+            width: 1.5,
+            color: AppColors.blue,
+          ),
+          Expanded(
+            child: Obx(
+              () => RefreshIndicator(
+                onRefresh: () => _homeController.getPosts(),
+                child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.only(bottom: 40),
+                  itemCount: _homeController.postagensValue.length,
+                  itemBuilder: (context, i) => post(i),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
