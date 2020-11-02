@@ -94,6 +94,8 @@ class PostController extends GetxController {
   }
 
   deletePost(int postId) async {
+    Get.find<LoadingController>().setIsLoading(true);
+
     canCheckError.value = true;
     validatePost();
 
@@ -116,6 +118,14 @@ class PostController extends GetxController {
     clearErrors();
 
     await Get.find<HomeController>().getPosts();
+
+    navigator.popUntil(ModalRoute.withName('/home'));
+  }
+
+  canceledOperation() async {
+    setPostContent('');
+    setHasError(false);
+    clearErrors();
 
     navigator.popUntil(ModalRoute.withName('/home'));
   }

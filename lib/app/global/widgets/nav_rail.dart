@@ -19,6 +19,9 @@ class CustomNavigationRails extends StatelessWidget {
         onDestinationSelected: (int index) => _navRailCtrl.goTo(index),
         labelType: NavigationRailLabelType.selected,
         groupAlignment: 0,
+        selectedLabelTextStyle: TextStyle(color: AppColors.textOrange),
+        selectedIconTheme: IconThemeData(color: AppColors.secondaryOrange),
+        unselectedIconTheme: IconThemeData(color: AppColors.textLightOrange),
         destinations: [
           NavigationRailDestination(
             icon: Icon(Icons.home_outlined),

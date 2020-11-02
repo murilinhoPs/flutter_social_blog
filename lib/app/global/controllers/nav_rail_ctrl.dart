@@ -9,7 +9,7 @@ class NavRailController extends GetxController {
   void goTo(int index) {
     setSelectedIndex(index);
 
-    if (selectedIndexValue == 0) if (Get.currentRoute != '/home') Get.toNamed('/home');
+    if (selectedIndexValue == 0) if (Get.currentRoute != '/home') Get.offNamed('/home');
 
     if (selectedIndexValue == 1) if (Get.currentRoute != '/news') Get.toNamed('/news');
 

@@ -17,7 +17,7 @@ class AppColors {
 
   static const lightOrange = Color(0xFFF59F74);
 
-  static const appBarColor = Color(0xFF2B2433);
+  static const appBarColor = Color(0xFF322342);
 
   static const darkPurple = Color(0xFF240041);
 
@@ -28,6 +28,8 @@ class AppColors {
   static const accentPurple = Color(0xFF461b93);
 
   static const red = Color(0xFFb32c50);
+
+  static const secondaryRed = Color(0xFFA3576B);
 
   static const blue = Color(0xFF526F9E);
 }

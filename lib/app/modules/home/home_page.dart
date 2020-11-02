@@ -113,10 +113,10 @@ class HomePage extends StatelessWidget {
             color: AppColors.blue,
           ),
           Expanded(
-            child: Obx(
-              () => RefreshIndicator(
-                onRefresh: () => _homeController.getPosts(),
-                child: ListView.builder(
+            child: RefreshIndicator(
+              onRefresh: () => _homeController.getPosts(),
+              child: Obx(
+                () => ListView.builder(
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.only(bottom: 40),
                   itemCount: _homeController.postagensValue.length,

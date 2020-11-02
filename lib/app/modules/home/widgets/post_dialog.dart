@@ -12,8 +12,6 @@ class PostDialog extends StatelessWidget {
   final _postController = Get.find<PostController>();
   final _loadingController = Get.find<LoadingController>();
 
-  // int postId = Get.arguments[1];
-
   _onSubmit(context) {
     _loadingController.setIsLoading(true);
 
@@ -41,7 +39,7 @@ class PostDialog extends StatelessWidget {
             size: 26.0,
             color: AppColors.textOrange,
           ),
-          onPressed: () => _postController.terminatedOperation(),
+          onPressed: () => _postController.canceledOperation(),
         ),
         actions: [
           Obx(
@@ -55,25 +53,40 @@ class PostDialog extends StatelessWidget {
                       Get.defaultDialog(
                         title: 'Deletar postagem!',
                         middleText: 'Você tem certeza que quer exluir essa postagem?',
+                        backgroundColor: AppColors.lighterBackground,
                         confirm: ElevatedButton(
                           style: ButtonStyle(
-                              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                EdgeInsets.symmetric(horizontal: 20),
-                              ),
-                              backgroundColor: MaterialStateProperty.all<Color>(AppColors.red)),
+                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                              EdgeInsets.symmetric(horizontal: 20),
+                            ),
+                            overlayColor: MaterialStateProperty.all<Color>(AppColors.secondaryRed),
+                            backgroundColor: MaterialStateProperty.all<Color>(AppColors.red),
+                          ),
                           onPressed: () => _postController.deletePost(userId),
-                          child: Text(
-                            'Excluir',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          child: Obx(
+                            () => _loadingController.isLoading.value
+                                ? Container(
+                                    height: 20,
+                                    width: 20,
+                                    margin: EdgeInsets.symmetric(horizontal: 15),
+                                    child: LoadingIndicator(
+                                      color: AlwaysStoppedAnimation<Color>(AppColors.textWhite),
+                                    ),
+                                  )
+                                : Text(
+                                    'Excluir',
+                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
                           ),
                         ),
                         cancel: TextButton(
                           child: Text(
                             'Cancelar',
                             style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.lightOrange),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.lightOrange,
+                            ),
                           ),
                           onPressed: () => navigator.pop(),
                         ),
@@ -134,14 +147,15 @@ class PostDialog extends StatelessWidget {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        EdgeInsets.symmetric(horizontal: 20),
+                        EdgeInsets.symmetric(horizontal: 30),
                       ),
                     ),
                     onPressed: () => _onSubmit(context),
                     child: _loadingController.isLoading.value
                         ? Container(
-                            height: 30,
-                            width: 30,
+                            height: 20,
+                            width: 20,
+                            margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 3.0),
                             child: LoadingIndicator(
                               color: AlwaysStoppedAnimation<Color>(AppColors.textWhite),
                             ),
