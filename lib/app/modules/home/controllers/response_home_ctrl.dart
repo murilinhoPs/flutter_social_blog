@@ -15,15 +15,15 @@ class HomeController extends GetxController {
   void setPostagens(List<AllPostsModel> value) => postagens.value = value;
 
   @override
-  void onInit() async {
-    await getUserInfo();
+  void onInit() {
+    getUserInfo();
 
-    await getPosts();
+    getPosts();
 
     super.onInit();
   }
 
-  getUserInfo() async {
+  getUserInfo() {
     final user = _profileController.userProfileValue;
 
     userImage.value = user.image.url;

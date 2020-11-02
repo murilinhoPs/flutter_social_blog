@@ -9,7 +9,7 @@ class NewsController extends GetxController {
   void setNoticias(List<NewsModel> value) => noticias.value = value;
 
   @override
-  void onInit() async {
+  void onInit() {
     getPosts();
     super.onInit();
   }

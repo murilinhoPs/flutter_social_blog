@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 
 class NewsPage extends StatelessWidget {
   final _newsController = Get.put(NewsController());
-  final _profileController = Get.find<ProfileController>();
 
   Widget news(int i) {
     return Container(
@@ -54,8 +53,7 @@ class NewsPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20.0),
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(
-                              'https://img.freepik.com/free-vector/newspaper-press_24908-18017.jpg?size=626&ext=jpg'),
+                          image: AssetImage('assets/news.jpg'),
                         ),
                       ),
                     ),

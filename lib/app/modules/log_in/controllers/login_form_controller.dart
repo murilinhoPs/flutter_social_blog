@@ -72,7 +72,7 @@ class LoginFormController extends GetxController {
 
       _loadingController.setIsLoading(false);
 
-      Get.toNamed('/home');
+      Get.offNamed('/home');
 
       return;
     }
@@ -86,6 +86,6 @@ class LoginFormController extends GetxController {
 
     _loadingController.setIsLoading(false);
 
-    Get.toNamed('/home');
+    Get.offNamed('/home');
   }
 }

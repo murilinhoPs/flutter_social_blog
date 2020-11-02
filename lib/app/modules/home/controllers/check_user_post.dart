@@ -43,12 +43,12 @@ class CheckUserPost extends GetxController {
 
           _postController.setPostContent(post.content);
 
-          print(_postController.postContentValue);
+          _postController.setPostId(post.id);
 
           Get.to(
             PostDialog(),
             transition: Transition.downToUp,
-            arguments: [Get.find<HomeController>().userImageValue, post.id],
+            arguments: [Get.find<HomeController>().userImageValue],
           );
         },
       ),

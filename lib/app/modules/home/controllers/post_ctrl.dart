@@ -15,9 +15,6 @@ class PostController extends GetxController {
   String get postContentValue => postContent.value;
   setPostContent(String value) => postContent.value = value;
 
-  bool hasError = true;
-  setHasError(bool value) => hasError = value;
-
   var canCheckError = false.obs;
   bool get canCheckErrorValue => canCheckError.value;
   void clearErrors() => canCheckError.value = false;
@@ -26,18 +23,20 @@ class PostController extends GetxController {
   EnumMethod get methodValue => method.value;
   void setMethod(EnumMethod value) => method.value = value;
 
+  bool hasError = true;
+  setHasError(bool value) => hasError = value;
+
+  int postId;
+  setPostId(int id) => postId = id;
+
   @override
   void onInit() {
     setMethod(EnumMethod.POST);
-
-    print(postContentValue);
 
     super.onInit();
   }
 
   String validatePost() {
-    print(Get.arguments);
-
     if (canCheckErrorValue) {
       if (postContentValue == '' || postContentValue.isEmpty) {
         setHasError(true);
@@ -59,8 +58,6 @@ class PostController extends GetxController {
     canCheckError.value = true;
     validatePost();
 
-    print(postContentValue.length);
-
     if (hasError) return Get.find<LoadingController>().setIsLoading(false);
 
     if (!hasError) {
@@ -70,15 +67,15 @@ class PostController extends GetxController {
 
       Get.find<LoadingController>().setIsLoading(false);
 
+      await Get.find<HomeController>().getPosts();
+
       terminatedOperation();
     }
   }
 
-  updatePost(int postId) async {
+  updatePost() async {
     canCheckError.value = true;
     validatePost();
-
-    print(postContentValue.length);
 
     if (hasError) return Get.find<LoadingController>().setIsLoading(false);
 
@@ -89,11 +86,13 @@ class PostController extends GetxController {
 
       Get.find<LoadingController>().setIsLoading(false);
 
+      await Get.find<HomeController>().getPosts();
+
       terminatedOperation();
     }
   }
 
-  deletePost(int postId) async {
+  deletePost() async {
     Get.find<LoadingController>().setIsLoading(true);
 
     canCheckError.value = true;
@@ -108,21 +107,13 @@ class PostController extends GetxController {
 
       Get.find<LoadingController>().setIsLoading(false);
 
-      await terminatedOperation();
+      await Get.find<HomeController>().getPosts();
+
+      terminatedOperation();
     }
   }
 
-  terminatedOperation() async {
-    setPostContent('');
-    setHasError(false);
-    clearErrors();
-
-    await Get.find<HomeController>().getPosts();
-
-    navigator.popUntil(ModalRoute.withName('/home'));
-  }
-
-  canceledOperation() async {
+  terminatedOperation() {
     setPostContent('');
     setHasError(false);
     clearErrors();

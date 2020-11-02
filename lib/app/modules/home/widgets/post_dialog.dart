@@ -23,7 +23,7 @@ class PostDialog extends StatelessWidget {
     if (_postController.methodValue == EnumMethod.POST)
       _postController.createPost();
     else
-      _postController.updatePost(Get.arguments[1]);
+      _postController.updatePost();
   }
 
   @override
@@ -39,7 +39,7 @@ class PostDialog extends StatelessWidget {
             size: 26.0,
             color: AppColors.textOrange,
           ),
-          onPressed: () => _postController.canceledOperation(),
+          onPressed: () => _postController.terminatedOperation(),
         ),
         actions: [
           Obx(
@@ -48,8 +48,6 @@ class PostDialog extends StatelessWidget {
                     splashRadius: 3.0,
                     icon: Icon(FontAwesome.trash_empty, size: 26.0, color: AppColors.red),
                     onPressed: () {
-                      int userId = Get.arguments[1];
-
                       Get.defaultDialog(
                         title: 'Deletar postagem!',
                         middleText: 'Você tem certeza que quer exluir essa postagem?',
@@ -62,7 +60,7 @@ class PostDialog extends StatelessWidget {
                             overlayColor: MaterialStateProperty.all<Color>(AppColors.secondaryRed),
                             backgroundColor: MaterialStateProperty.all<Color>(AppColors.red),
                           ),
-                          onPressed: () => _postController.deletePost(userId),
+                          onPressed: () => _postController.deletePost(),
                           child: Obx(
                             () => _loadingController.isLoading.value
                                 ? Container(

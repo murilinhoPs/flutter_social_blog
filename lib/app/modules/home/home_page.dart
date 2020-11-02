@@ -1,3 +1,4 @@
+import 'package:challenge_bt_app/app/global/widgets/loading_indicator.dart';
 import 'package:challenge_bt_app/app/global/widgets/nav_rail.dart';
 import 'package:challenge_bt_app/app/modules/home/controllers/post_ctrl.dart';
 import 'package:challenge_bt_app/app/modules/home/controllers/response_home_ctrl.dart';
@@ -120,7 +121,8 @@ class HomePage extends StatelessWidget {
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.only(bottom: 40),
                   itemCount: _homeController.postagensValue.length,
-                  itemBuilder: (context, i) => post(i),
+                  itemBuilder: (context, i) =>
+                      _homeController.postagensValue.isNull ? LoadingIndicator() : post(i),
                 ),
               ),
             ),

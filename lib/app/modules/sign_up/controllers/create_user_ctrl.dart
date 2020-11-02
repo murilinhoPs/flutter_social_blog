@@ -58,6 +58,6 @@ class CreateUserController {
 
     _loadingController.setIsLoading(false);
 
-    Get.toNamed('/home');
+    Get.offAllNamed('/home');
   }
 }

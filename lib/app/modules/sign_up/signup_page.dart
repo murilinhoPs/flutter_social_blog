@@ -66,7 +66,7 @@ class SignupPage extends StatelessWidget {
                   width: 80,
                   child: _loadingController.isLoading.value
                       ? Container(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          padding: EdgeInsets.symmetric(horizontal: 30),
                           height: 20,
                           width: 20,
                           child: LoadingIndicator(
