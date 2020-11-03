@@ -30,11 +30,26 @@ ________________________________________________________________________________
 6. The build is in the dist folder, it's an apk
 7. Thanks!
 
+#
+
 ### Back-end
 I made the rest api that I'm consuming in the app. I added authentication with JWT and refresh tokens, added postgreesql in heroku with users_tables, image for profile image and posts table. I made using nodeJs with typescript, here is the repository: https://github.com/murilinhoPs/auth_back_ts.
 
 1. There some things I need to fix in the back-end, like the profile images that disapear from the api after some time, because heroku sleeps and clean the folder. I'm going to put the images in the google cloud.
 2. Might be another error or another, but feel free to take a look. Thanks!
+
+#
+
+### Bugs
+
+1. If this occurs, just pull the page to refresh or go to other page and back to this page.
+    <p  align="center">
+      <img align="center" src="./assets/readme/bug_1.jpg" alt="drawing" height="400"/>
+    </p>
+
+2. If you find another bug, add a issue and I'll try to fix later or you can help to fix it
+
+#
 
 #### Getting Started
 This project is a starting point for a Flutter application.
