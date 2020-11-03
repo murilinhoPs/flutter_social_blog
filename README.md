@@ -11,10 +11,10 @@ A Flutter project simulating a blogging app to share ideas and thoughts. It's a 
 _______________________________________________________________________________________________________________________________________
 
 <p>
-<img align="center" src="./assets/readme/create_page.jpg" alt="drawing" height="430"/>
-<img align="center" src="./assets/readme/home1.jpg" alt="drawing" height="430"/>
-<img align="center" src="./assets/readme/create_post.jpg" alt="drawing" height="430"/>
-<img align="center" src="./assets/readme/delete_post.jpg" alt="drawing" height="430"/>
+<img align="center" src="./assets/readme/create_page.jpg" alt="drawing" height="440"/>
+<img align="center" src="./assets/readme/home1.jpg" alt="drawing" height="440"/>
+<img align="center" src="./assets/readme/create_post.jpg" alt="drawing" height="440"/>
+<img align="center" src="./assets/readme/delete_post.jpg" alt="drawing" height="440"/>
 </p>
 
 
