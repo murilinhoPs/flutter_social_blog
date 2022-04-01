@@ -1,4 +1,4 @@
-# Challenge_bt_app
+# flutter_social_blog
 
 A Flutter project simulating a blogging app to share ideas and thoughts. It's a basic app that I used twitter as base and added my custom "flavors", another navigation method  and I used halloween colors palletes. 
 
